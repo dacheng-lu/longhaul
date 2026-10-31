@@ -2,7 +2,16 @@
 
 ## Inventory before expansion
 
-Classify relevant capabilities as callable, installed-but-unavailable, externally discovered or unavailable. Record name, task purpose, observed availability, permission boundary and fallback. Refresh availability after environment changes.
+Classify every relevant capability and record it in the checkpoint's `capabilities[]` array, one entry per capability:
+
+| `class` | Meaning | Gate requirement |
+|---|---|---|
+| `callable` | observed working on this host | `last_success` (what you ran, what came back) or `untested: true` |
+| `installed_unavailable` | present but not usable now (auth, quota, port) | — |
+| `discovered` | read about in docs or a repository, never connected | never counts as callable |
+| `unavailable` | absent; a fallback is in use | — |
+
+Each entry also carries `name`, `purpose`, `permission`, `source` (URL and version) and `fallback`. Refresh `observed_at` after an environment change. A discovered repository is source material, not a callable endpoint, and the gate will not let the record claim otherwise.
 
 1. Filter current tool/skill registries by the task; do not print the entire registry. Prefer sufficient service connectors/MCPs over browser fallback, respecting user preferences.
 2. Inspect local project tools and versions when relevant. Follow AGENTS.md and domain skills.

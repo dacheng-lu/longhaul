@@ -10,7 +10,7 @@
 
 [English](#english) · [简体中文](#zh-cn) · [Deutsch](#deutsch)
 
-Skill version: **1.0** · [Core protocol / 核心流程 / Kernprotokoll](SKILL.md) · [Apache-2.0](LICENSE)
+Skill version: **1.1** · [Core protocol / 核心流程 / Kernprotokoll](SKILL.md) · [Apache-2.0](LICENSE)
 
 ## English
 
@@ -64,12 +64,13 @@ The helper uses the Python 3 standard library and makes no network requests. Fro
 
 ```bash
 python3 scripts/checkpoint.py init ../longhaul-state/task.json --task-id demo-001 --goal "Produce a verified research brief"
-python3 scripts/checkpoint.py validate ../longhaul-state/task.json
-# Fill in acceptance criteria, deliverables and evidence before the final gate.
+python3 scripts/checkpoint.py artifact ../longhaul-state/task.json --id A1 --locator ../brief.md
+python3 scripts/checkpoint.py evidence ../longhaul-state/task.json --id E1 --artifact A1 --result pass
+# Add acceptance criteria that cite E1, then run the gate.
 python3 scripts/checkpoint.py gate ../longhaul-state/task.json
 ```
 
-`init` refuses to overwrite an existing file. A fresh template can pass `validate`, but **must fail `gate`** until the required records are filled. `gate` checks acceptance status, evidence revisions, unresolved blockers and local file hashes. It does **not** verify semantic correctness or remote results. See the [checkpoint contract](references/state.md).
+`revision` is the first 12 hex of the file's sha256, so nobody bumps a label by hand: register the file again and every piece of evidence bound to the old revision is reported stale, which re-verifies only the criteria that depend on it. `init` refuses to overwrite. A fresh template passes `validate` and **fails `gate`** until criteria are verified. `gate` also rejects a credential-shaped value in the state, an unchanged retry, a third attempt without a hypothesis change, a bundled next action, a future timestamp, an artifact no evidence binds, and a shortcut without an upgrade trigger. It checks bookkeeping and local hashes — **not** semantic correctness or remote results. `migrate` upgrades a v1 record and re-binds evidence only while the content hash still matches. See the [checkpoint contract](references/state.md).
 
 Keep task state outside the installed skill directory and persist it through the host’s durable storage workflow. A temporary local path alone is not a recovery guarantee.
 
@@ -141,12 +142,13 @@ Useful contributions include reproducible recovery scenarios, clearer host setup
 
 ```bash
 python3 scripts/checkpoint.py init ../longhaul-state/task.json --task-id demo-001 --goal "完成经过核验的研究简报"
-python3 scripts/checkpoint.py validate ../longhaul-state/task.json
-# 填写验收条件、交付物和证据后，再执行最终检查。
+python3 scripts/checkpoint.py artifact ../longhaul-state/task.json --id A1 --locator ../brief.md
+python3 scripts/checkpoint.py evidence ../longhaul-state/task.json --id E1 --artifact A1 --result pass
+# 写入引用 E1 的验收条件后，执行最终检查。
 python3 scripts/checkpoint.py gate ../longhaul-state/task.json
 ```
 
-`init` 拒绝覆盖已有文件。新模板可以通过 `validate`，但在必要记录填写完整前，**应当无法通过 `gate`**。`gate` 检查验收状态、证据版本、未解决的阻塞和本地文件哈希，**不会**判断内容是否正确，也不会核验远程结果。详见[检查点约定](references/state.md)。
+`revision` 是文件 sha256 的前 12 位，因此不需要手工递增版本号：再次登记同一文件就会产生新版本，绑定旧版本的证据被标记为过期，只有依赖它的验收条件需要重新核验。`init` 拒绝覆盖已有文件；新模板可以通过 `validate`，但在验收条件通过前**必然无法通过 `gate`**。`gate` 还会拒绝：状态中的凭证形态数值、原样重试、同一阻塞第三次仍未更换假设、打包多步的下一步动作、未来时间戳、没有任何证据绑定的产物，以及没有升级触发的捷径记录。它只检查记账与本地哈希，**不**判断内容是否正确，也不核验远程结果。`migrate` 把 v1 记录升级为 v2，并且只在内容哈希仍然一致时重新绑定证据。详见[检查点约定](references/state.md)。
 
 将任务状态保存在已安装 Skill 目录之外，并通过宿主的持久存储流程保存。仅有一个临时本地路径，不能保证任务可恢复。
 
@@ -217,12 +219,13 @@ Das Skript verwendet ausschließlich die Python-3-Standardbibliothek und sendet 
 
 ```bash
 python3 scripts/checkpoint.py init ../longhaul-state/task.json --task-id demo-001 --goal "Einen geprüften Recherchebericht erstellen"
-python3 scripts/checkpoint.py validate ../longhaul-state/task.json
-# Vor der Abschlussprüfung Abnahmekriterien, Ergebnisse und Belege eintragen.
+python3 scripts/checkpoint.py artifact ../longhaul-state/task.json --id A1 --locator ../brief.md
+python3 scripts/checkpoint.py evidence ../longhaul-state/task.json --id E1 --artifact A1 --result pass
+# Abnahmekriterien eintragen, die E1 referenzieren, dann die Abschlussprüfung starten.
 python3 scripts/checkpoint.py gate ../longhaul-state/task.json
 ```
 
-`init` überschreibt keine vorhandene Datei. Eine neue Vorlage kann `validate` bestehen, **muss aber bei `gate` scheitern**, solange die erforderlichen Einträge fehlen. `gate` prüft den Abnahmestatus, die Versionen der Belege, offene Hindernisse und lokale Datei-Hashes. Inhaltliche Richtigkeit und entfernte Ergebnisse werden **nicht** geprüft. Details stehen in der [Checkpoint-Spezifikation](references/state.md).
+`revision` sind die ersten 12 Hex-Zeichen des sha256 der Datei — niemand zählt eine Version von Hand hoch: wird die Datei erneut registriert, gilt jeder an die alte Revision gebundene Beleg als veraltet, und nur die davon abhängigen Kriterien müssen erneut geprüft werden. `init` überschreibt nichts; eine neue Vorlage besteht `validate` und **scheitert an `gate`**, solange Kriterien nicht verifiziert sind. `gate` weist außerdem zurück: einen zugangsdatenförmigen Wert im Zustand, einen unveränderten Wiederholungsversuch, einen dritten Versuch ohne Hypothesenwechsel, einen gebündelten nächsten Schritt, einen Zeitstempel in der Zukunft, ein Artefakt ohne Beleg und eine Abkürzung ohne Auslöser für die Rückkehr. Geprüft werden Buchhaltung und lokale Hashes — **nicht** inhaltliche Richtigkeit oder entfernte Ergebnisse. `migrate` hebt einen v1-Datensatz auf v2 und bindet Belege nur neu, solange der Inhalts-Hash noch passt. Details: [Checkpoint-Spezifikation](references/state.md).
 
 Den Aufgabenstand außerhalb des installierten Skill-Verzeichnisses ablegen und über die dauerhafte Speicherfunktion der Host-Umgebung sichern. Ein temporärer lokaler Pfad allein garantiert keine Wiederaufnahme.
 
@@ -250,8 +253,10 @@ The implementation documents are currently in English. 本节链接的实现文�
 | [references/state.md](references/state.md) | Checkpoint contract · 检查点约定 · Checkpoint-Spezifikation |
 | [references/capabilities.md](references/capabilities.md) | Tools and delegation · 工具与委派 · Werkzeuge und Delegation |
 | [references/grill.md](references/grill.md) | ABCD decision review · ABCD 决策审查 · ABCD-Entscheidungsprüfung |
-| [references/learning.md](references/learning.md) | SECI and diagnostics · SECI 与诊断 · SECI und Diagnose |
+| [references/learning.md](references/learning.md) | SECI and lessons · SECI 与经验积累 · SECI und Lektionen |
 | [scripts/checkpoint.py](scripts/checkpoint.py) | State validator · 状态验证器 · Zustandsvalidator |
+| [scripts/secret_scan.py](scripts/secret_scan.py) | Credential detector · 凭证检测器 · Zugangsdaten-Erkennung |
+| [tests/test_checkpoint.py](tests/test_checkpoint.py) | Gate tests · 校验测试 · Gate-Tests |
 | [agents/openai.yaml](agents/openai.yaml) | Host interface metadata · 宿主界面元数据 · Metadaten für die Host-Oberfläche |
 | [assets/icon.svg](assets/icon.svg) | Skill icon · Skill 图标 · Skill-Symbol |
 

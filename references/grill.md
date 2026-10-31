@@ -8,7 +8,7 @@ Challenge decisions respectfully. Stop when remaining uncertainty no longer chan
 - User-owned tradeoff: ask when the answer materially changes scope, success, cost or desired behavior.
 - Authorization: use the host's approval mechanism. Never bury approval in a recommended default or treat silence as consent.
 
-Ask at most one or two consequential questions per round. Default to two clarification rounds per decision, then summarize a real blocker or use a reversible optional assumption. Continue independent work.
+Ask at most one or two consequential questions per round. Default to one round per decision, then summarize and start on explicit acceptance — a second alignment round-trip on an already-aligned user is a defect, not thoroughness. When an answer is genuinely missing, state a reversible default or name the concrete blocker. Continue independent work.
 
 ## ABCD format
 

@@ -5,7 +5,7 @@ description: "远航 · Longhaul coordinates complex long-horizon research, crea
 
 # 远航 · Longhaul
 
-Version: 1.0
+Version: 1.1
 
 Support sustained progress, recoverable work and honest delivery. Treat this skill as an orchestration protocol, not a background runtime or a guarantee of success. Follow host policies, user authorization and relevant domain skills. Do not replace domain validation with generic reflection.
 
@@ -25,7 +25,7 @@ Use host-native durable task storage if provided. Otherwise use a project-backed
 
 For filesystem workflows, run:
 `python3 <skill-dir>/scripts/checkpoint.py init <task-state.json> --task-id <id> --goal <goal>`
-Fill the generated template, then run `validate`; run `gate` before delivery. Read [state.md](references/state.md). Store task state outside this installed skill directory. With API-backed storage preserve equivalent fields.
+Register each output with `artifact` (it records the sha256 and a content-derived revision), bind observations with `evidence`, write acceptance criteria that cite those evidence ids, then run `validate`; run `gate` before delivery. Editing a file gives it a new revision, so only the evidence and criteria that depend on it go stale — re-verify what changed instead of re-running everything. Read [state.md](references/state.md). Store task state outside this installed skill directory. With API-backed storage preserve equivalent fields.
 
 Checkpoint after a verified milestone, consequential decision, failed approach, and before planned handoff or long operation. Do not depend on receiving a pre-crash event. On resumption reconcile actual state and stale evidence before proceeding. Use separate records for independent tasks and one writer for shared state.
 
@@ -34,7 +34,7 @@ Checkpoint after a verified milestone, consequential decision, failed approach, 
 - Perform the next bounded action with the appropriate skill/tool. Parallelize independent reads; sequence dependencies and shared mutations.
 - Compare observations to the criterion. Separate attempted, produced and verified. Link evidence to the artifact revision it supports.
 - Trigger focused grilling at consequential forks, contradictory evidence, repeated failure or pre-delivery. Challenge the weakest assumption with a discriminating check. Avoid ceremonial fourteen-step reflection.
-- Default to at most two unchanged transient attempts and three meaningfully distinct approaches to one blocker, unless the user sets another budget. Check external effects before retrying an operation that may have succeeded. Change hypothesis, use a safe fallback or report the blocker while continuing independent work.
+- Default to at most two unchanged transient attempts and three meaningfully distinct approaches to one blocker, unless the user sets another budget. Record attempts with `blocker_key`, `hypothesis_before` and `hypothesis_after`: the gate rejects an unchanged retry and three attempts on one blocker without a hypothesis change. Check external effects before retrying an operation that may have succeeded. Change hypothesis, use a safe fallback or report the blocker while continuing independent work.
 - Never lower acceptance criteria merely to declare completion. Record user-approved scope changes explicitly.
 - Give concise progress updates at the host's required cadence: findings, uncertainty and next action.
 
@@ -48,16 +48,16 @@ For consequential user-owned choices, present four genuinely distinct options A�
 
 Resolve researchable facts with tools, not preference votes. Do not re-ask settled questions. Continue independent work while awaiting answers. For optional unanswered choices, state a reversible default; missing answers never authorize consequential external actions.
 
-## Learn with SECI and symbol diagnostics
+## Learn with SECI
 
 For meaningful reusable findings: observe practice, articulate a candidate rule, integrate with existing knowledge, and test on another case. Preserve source, scope, counterexamples and validation status. Do not turn untested self-reflection into a universal rule or automatically rewrite this skill after one failure.
 
-Use rune groups as optional diagnostic labels, not evidence or mandatory execution order. Read [learning.md](references/learning.md) when extracting lessons or diagnosing persistent stalls. Do not claim weight updates or guaranteed improvement.
+Read [learning.md](references/learning.md) when extracting lessons or diagnosing a persistent stall. Do not claim weight updates or guaranteed improvement.
 
 ## Verify and hand off
 
 1. Compare current output to every acceptance criterion. Verify actual files, tests, primary sources or observed external state. Independently inspect important worker claims.
 2. Ensure evidence applies to the current revision. Reuse valid evidence when relevant inputs have not changed; rerun checks when invalidated.
-3. Run the checkpoint gate if available. It checks bookkeeping and local hashes, not semantic correctness. Complete domain-specific quality checks.
+3. Run the checkpoint gate if available. It checks bookkeeping and local hashes, not semantic correctness. An observation you could not make is recorded as `result: unknown` with a reason; completing over it needs a recorded waiver naming who approved it. Complete domain-specific quality checks.
 4. Persist state and deliver using host-specific artifact links. Report verified outcomes and material limitations. If incomplete, provide usable partial work, blockers and the exact next action without marking the overall task complete.
 5. Never claim installation, external execution, scheduling, recovery or verification without an observed result. Disclose material capability reductions.
