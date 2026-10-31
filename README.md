@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="assets/logo.png" alt="Longhaul · 远航 logo" width="640">
+</p>
+
 # 远航 · Longhaul
 
 **Code the Journey. Automate the Distance.**  
