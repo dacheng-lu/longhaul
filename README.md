@@ -4,7 +4,7 @@
 **持续推进 · 中断可续 · 凭证交付**  
 **Kontinuierlich arbeiten · Aufgaben wiederaufnehmen · Ergebnisse belegen**
 
-[English](#english) · [简体中文](#简体中文) · [Deutsch](#deutsch)
+[English](#english) · [简体中文](#zh-cn) · [Deutsch](#deutsch)
 
 Skill version: **1.0** · [Core protocol / 核心流程 / Kernprotokoll](SKILL.md) · [Apache-2.0](LICENSE)
 
@@ -82,6 +82,8 @@ Keep task state outside the installed skill directory and persist it through the
 Useful contributions include reproducible recovery scenarios, clearer host setup instructions and checks that catch unsupported completion claims. Include the expected behavior, observed behavior and verification steps. Never include credentials or private task data.
 
 [Files and design references](#files-and-design-references) · [Back to top](#远航--longhaul)
+
+<a name="zh-cn"></a>
 
 ## 简体中文
 
