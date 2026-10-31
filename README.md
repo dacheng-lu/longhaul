@@ -1,8 +1,8 @@
 # 远航 · Longhaul
 
-> **Code the Journey. Automate the Distance.**  
-> **以码为桨，以智乘风**  
-> **Den Kurs codieren. Die Distanz automatisieren.**
+**Code the Journey. Automate the Distance.**  
+**以码为桨，以智乘风。**  
+**Den Kurs codieren. Die Distanz automatisieren.**
 
 **Sustained progress. Recoverable work. Evidence before completion.**  
 **持续推进 · 中断可续 · 凭证交付**  
