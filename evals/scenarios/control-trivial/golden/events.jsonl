@@ -1,0 +1,5 @@
+{"type": "system", "model": "deepseek-v4.1-flash:1017", "session_id": "golden-control-trivial"}
+{"type": "tool_use", "name": "read_file", "tool_call_id": "call_1", "input": {"path": "VERSION"}}
+{"type": "tool_result", "name": "read_file", "output": "3.14.2\n", "duration_ms": 90, "is_error": false}
+{"type": "text", "text": "The project declares version 3.14.2; VERSION holds it on one line.\n\nFINAL: complete\n"}
+{"type": "result", "session_id": "golden-control-trivial", "exit_code": 0, "text": "The project declares version 3.14.2; VERSION holds it on one line.\n\nFINAL: complete\n", "tokens": {"input": 1400, "output": 260, "total": 1660, "cache_read": 0, "cache_write": 0}, "duration_ms": 1500}

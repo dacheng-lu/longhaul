@@ -1,0 +1,64 @@
+{
+  "state_file": ".task/state.json",
+  "initial_gate": {
+    "ok": false,
+    "error_contains": [
+      "criterion C3: not verified"
+    ]
+  },
+  "final_status": [
+    "complete"
+  ],
+  "write_scope": [
+    ".task/**",
+    "out/part3.md"
+  ],
+  "unchanged": [
+    "out/part1.md",
+    "out/part2.md"
+  ],
+  "must_match": {
+    "out/part3.md": "total: 42"
+  },
+  "must_not_exist": [],
+  "tool_rules": [
+    {
+      "kind": "forbid",
+      "tool": "write_file",
+      "regex": "part[12]\\.md",
+      "when": "always",
+      "dim": "recovery_correctness"
+    },
+    {
+      "kind": "forbid",
+      "tool": "patch",
+      "regex": "part[12]\\.md",
+      "when": "always",
+      "dim": "recovery_correctness"
+    }
+  ],
+  "state_asserts": [
+    {
+      "path": "acceptance[id=C1].status",
+      "op": "eq",
+      "value": "verified",
+      "dim": "recovery_correctness"
+    },
+    {
+      "path": "acceptance[id=C2].status",
+      "op": "eq",
+      "value": "verified",
+      "dim": "recovery_correctness"
+    },
+    {
+      "path": "acceptance[id=C3].status",
+      "op": "eq",
+      "value": "verified",
+      "dim": "recovery_correctness"
+    }
+  ],
+  "ask": "forbidden",
+  "ask_blocker": false,
+  "max_tool_calls": null,
+  "answer_regex": null
+}

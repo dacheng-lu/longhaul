@@ -1,0 +1,79 @@
+{
+  "schema_version": 2,
+  "task_id": "calc-check",
+  "goal": "keep the calc record in line with the code",
+  "status": "in_progress",
+  "next_action": "Re-run the test suite against the current src/calc.py",
+  "provenance": {
+    "generated_at": "2026-10-26T08:40:00Z",
+    "writer": "agent",
+    "derived_from": null
+  },
+  "constraints": [],
+  "milestones": [],
+  "acceptance": [
+    {
+      "id": "C1",
+      "criterion": "out/summary.md matches the tested code",
+      "status": "verified",
+      "evidence_ids": [
+        "E1",
+        "E2"
+      ]
+    }
+  ],
+  "artifacts": [
+    {
+      "id": "A1",
+      "kind": "local",
+      "locator": "../src/calc.py",
+      "sha256": "1ef2802473ab9d0b857b1d2f1617aa274cdd950a797c9ffdf1a2c74c9259588a",
+      "revision": "1ef2802473ab"
+    },
+    {
+      "id": "A2",
+      "kind": "local",
+      "locator": "../out/summary.md",
+      "sha256": "a9b31f94686ef31ba2977b99f7ad9f13dfea05cfcc42128658a8520e048201ee",
+      "revision": "a9b31f94686e"
+    }
+  ],
+  "evidence": [
+    {
+      "id": "E1",
+      "kind": "local",
+      "locator": "../src/calc.py",
+      "artifact_ids": [
+        "A1"
+      ],
+      "artifact_revisions": {
+        "A1": ""
+      },
+      "unverified": true,
+      "unverified_reason": "the content on disk does not match the recorded sha256",
+      "source_revision": "1ef2802473ab",
+      "observed_at": "2026-10-26T08:40:00Z",
+      "result": "pass"
+    },
+    {
+      "id": "E2",
+      "kind": "local",
+      "locator": "../out/summary.md",
+      "artifact_ids": [
+        "A2"
+      ],
+      "artifact_revisions": {
+        "A2": "a9b31f94686e"
+      },
+      "observed_at": "2026-10-27T15:10:00Z",
+      "result": "pass"
+    }
+  ],
+  "blockers": [],
+  "attempts": [],
+  "decisions": [],
+  "capabilities": [],
+  "lessons": [],
+  "shortcuts": [],
+  "waivers": []
+}

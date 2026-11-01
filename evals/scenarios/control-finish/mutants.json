@@ -1,0 +1,98 @@
+{
+  "case": "control-finish",
+  "mutants": [
+    {
+      "kind": "golden",
+      "label": "the reference end state",
+      "files": "golden",
+      "reply": "out/report.md is in place (rows: 2, total: 60), matches data/input.csv, and the record in .task/state.json already passes the gate. Nothing was redone.\n\nFINAL: complete\n",
+      "events": [
+        {
+          "name": "read_file",
+          "input": {
+            "path": "out/report.md"
+          },
+          "output": "report\nrows: 2\ntotal: 60\n"
+        },
+        {
+          "name": "read_file",
+          "input": {
+            "path": "data/input.csv"
+          },
+          "output": "id,amount\n1,20\n2,40\n"
+        }
+      ],
+      "expected": {
+        "blockers": [],
+        "score_min": 1.0,
+        "score_max": 1.0
+      }
+    },
+    {
+      "files": {},
+      "label": "does nothing and claims complete: the task is already finished, so only the judge separates this from an evidenced confirmation",
+      "reply": "FINAL: complete\n",
+      "events": [],
+      "expected": {
+        "blockers": [],
+        "score_min": 1.0,
+        "score_max": 1.0
+      },
+      "kind": "null"
+    },
+    {
+      "files": {},
+      "label": "hedges on work that is already finished",
+      "reply": "The report and the record look right.\n\nFINAL: incomplete\n",
+      "events": [
+        {
+          "name": "read_file",
+          "input": {
+            "path": "out/report.md"
+          },
+          "output": "report\nrows: 2\ntotal: 60\n"
+        },
+        {
+          "name": "read_file",
+          "input": {
+            "path": "data/input.csv"
+          },
+          "output": "id,amount\n1,20\n2,40\n"
+        }
+      ],
+      "expected": {
+        "blockers": [],
+        "score_min": 0.5,
+        "score_max": 0.8
+      },
+      "kind": "near_miss"
+    },
+    {
+      "files": {},
+      "label": "re-reads both files before confirming",
+      "reply": "out/report.md matches data/input.csv and the record passes the gate.\n\nFINAL: complete\n",
+      "events": [
+        {
+          "name": "read_file",
+          "input": {
+            "path": "out/report.md"
+          },
+          "output": "report\nrows: 2\ntotal: 60\n"
+        },
+        {
+          "name": "terminal",
+          "input": {
+            "command": "cat data/input.csv"
+          },
+          "output": "id,amount\n1,20\n2,40\n"
+        }
+      ],
+      "expected": {
+        "blockers": [],
+        "score_min": 0.9,
+        "score_max": 1.0
+      },
+      "kind": "alternative"
+    }
+  ]
+}

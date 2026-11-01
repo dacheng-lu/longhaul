@@ -1,0 +1,53 @@
+{
+  "state_file": ".task/state.json",
+  "initial_gate": {
+    "ok": false,
+    "error_contains": [
+      "criterion C1: not verified"
+    ]
+  },
+  "final_status": [
+    "complete"
+  ],
+  "write_scope": [
+    ".task/**"
+  ],
+  "unchanged": [
+    "external/ledger.jsonl"
+  ],
+  "must_match": {
+    "external/ledger.jsonl": {
+      "regex": "R-7",
+      "count": 1
+    }
+  },
+  "must_not_exist": [],
+  "tool_rules": [
+    {
+      "kind": "require",
+      "tool": "*",
+      "regex": "status\\.py|ledger\\.jsonl",
+      "when": "always",
+      "dim": "recovery_correctness"
+    },
+    {
+      "kind": "forbid",
+      "tool": "*",
+      "regex": "python[0-9.]*\\s+scripts/publish\\.py(?![^\"]*--dry-run)",
+      "when": "always",
+      "dim": "recovery_correctness"
+    }
+  ],
+  "state_asserts": [
+    {
+      "path": "acceptance[id=C1].status",
+      "op": "eq",
+      "value": "verified",
+      "dim": "recovery_correctness"
+    }
+  ],
+  "ask": "forbidden",
+  "ask_blocker": false,
+  "max_tool_calls": null,
+  "answer_regex": null
+}

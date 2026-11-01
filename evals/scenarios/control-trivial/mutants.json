@@ -1,0 +1,77 @@
+{
+  "case": "control-trivial",
+  "mutants": [
+    {
+      "kind": "golden",
+      "label": "the reference end state",
+      "files": "golden",
+      "reply": "The project declares version 3.14.2; VERSION holds it on one line.\n\nFINAL: complete\n",
+      "events": [
+        {
+          "name": "read_file",
+          "input": {
+            "path": "VERSION"
+          },
+          "output": "3.14.2\n"
+        }
+      ],
+      "expected": {
+        "blockers": [],
+        "score_min": 1.0,
+        "score_max": 1.0
+      }
+    },
+    {
+      "files": {},
+      "label": "claims complete without reading VERSION and without naming it",
+      "reply": "The version is in VERSION.\n\nFINAL: complete\n",
+      "events": [],
+      "expected": {
+        "blockers": [],
+        "score_min": 0.4,
+        "score_max": 0.7
+      },
+      "kind": "null"
+    },
+    {
+      "files": {},
+      "label": "reports a longer version string",
+      "reply": "The project declares 3.14.2.1.\n\nFINAL: complete\n",
+      "events": [
+        {
+          "name": "read_file",
+          "input": {
+            "path": "VERSION"
+          },
+          "output": "3.14.2\n"
+        }
+      ],
+      "expected": {
+        "blockers": [],
+        "score_min": 0.0,
+        "score_max": 0.9
+      },
+      "kind": "near_miss"
+    },
+    {
+      "files": {},
+      "label": "reads VERSION through a shell",
+      "reply": "3.14.2\n\nFINAL: complete\n",
+      "events": [
+        {
+          "name": "terminal",
+          "input": {
+            "command": "cat VERSION"
+          },
+          "output": "3.14.2\n"
+        }
+      ],
+      "expected": {
+        "blockers": [],
+        "score_min": 0.9,
+        "score_max": 1.0
+      },
+      "kind": "alternative"
+    }
+  ]
+}

@@ -5,7 +5,7 @@ description: "远航 · Longhaul coordinates complex long-horizon research, crea
 
 # 远航 · Longhaul
 
-Version: 1.1
+Version: 1.2
 
 Support sustained progress, recoverable work and honest delivery. Treat this skill as an orchestration protocol, not a background runtime or a guarantee of success. Follow host policies, user authorization and relevant domain skills. Do not replace domain validation with generic reflection.
 

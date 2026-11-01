@@ -1,0 +1,43 @@
+{
+  "state_file": ".task/state.json",
+  "initial_gate": {
+    "ok": false,
+    "error_contains": [
+      "criterion C1: not verified"
+    ]
+  },
+  "final_status": [
+    "complete"
+  ],
+  "write_scope": [
+    ".task/**",
+    "out/export.csv"
+  ],
+  "unchanged": [
+    "data/orders.csv"
+  ],
+  "must_match": {
+    "out/export.csv": "id,total"
+  },
+  "must_not_exist": [
+    "out/export.json"
+  ],
+  "tool_rules": [],
+  "state_asserts": [
+    {
+      "path": "acceptance[id=C1].status",
+      "op": "eq",
+      "value": "verified",
+      "dim": "recovery_correctness"
+    },
+    {
+      "path": "decisions",
+      "op": "unchanged",
+      "dim": "autonomy"
+    }
+  ],
+  "ask": "forbidden",
+  "ask_blocker": true,
+  "max_tool_calls": null,
+  "answer_regex": null
+}

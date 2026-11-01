@@ -1,0 +1,62 @@
+{
+  "schema_version": 1,
+  "task_id": "release-page",
+  "goal": "produce the release page and its PDF",
+  "artifact_revision": "dca14ffebe7c",
+  "status": "in_progress",
+  "next_action": "Render docs/page.md to out/render.pdf with lhrender",
+  "constraints": [],
+  "milestones": [],
+  "acceptance": [
+    {
+      "id": "C1",
+      "criterion": "out/page.html is generated from docs/page.md",
+      "status": "verified",
+      "evidence_ids": [
+        "E1",
+        "E2"
+      ]
+    },
+    {
+      "id": "C2",
+      "criterion": "out/render.pdf is produced with lhrender",
+      "status": "pending",
+      "evidence_ids": []
+    }
+  ],
+  "blockers": [],
+  "attempts": [],
+  "decisions": [],
+  "capabilities": [],
+  "lessons": [],
+  "deliverables": [
+    {
+      "kind": "local",
+      "locator": "../docs/page.md",
+      "sha256": "dca14ffebe7c6cf2605b4b562eb9669bc76d06e4262a3e0b9fa3c2a2af91b2e3"
+    },
+    {
+      "kind": "local",
+      "locator": "../out/page.html",
+      "sha256": "5b703bb2ae69e204d76f404beb88d17020dc0e0d944c36a9b1ea329c5263889d"
+    }
+  ],
+  "evidence": [
+    {
+      "id": "E1",
+      "kind": "local",
+      "locator": "../docs/page.md",
+      "artifact_revision": "dca14ffebe7c",
+      "observed_at": "2026-10-26T08:40:00Z",
+      "result": "pass"
+    },
+    {
+      "id": "E2",
+      "kind": "local",
+      "locator": "../out/page.html",
+      "artifact_revision": "dca14ffebe7c",
+      "observed_at": "2026-10-27T15:10:00Z",
+      "result": "pass"
+    }
+  ]
+}

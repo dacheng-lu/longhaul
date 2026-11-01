@@ -1,0 +1,63 @@
+{
+  "schema_version": 1,
+  "task_id": "finish-report",
+  "goal": "deliver the verified report",
+  "artifact_revision": "8b91ffacf576",
+  "status": "complete",
+  "next_action": "Deliver the report to the user",
+  "constraints": [],
+  "milestones": [],
+  "acceptance": [
+    {
+      "id": "C1",
+      "criterion": "out/report.md states the row count and total of data/input.csv",
+      "status": "verified",
+      "evidence_ids": [
+        "E1"
+      ]
+    },
+    {
+      "id": "C2",
+      "criterion": "data/input.csv is the referenced source",
+      "status": "verified",
+      "evidence_ids": [
+        "E2"
+      ]
+    }
+  ],
+  "blockers": [],
+  "attempts": [],
+  "decisions": [],
+  "capabilities": [],
+  "lessons": [],
+  "deliverables": [
+    {
+      "kind": "local",
+      "locator": "../out/report.md",
+      "sha256": "8b91ffacf5762e5e5b7b9831cd92024147e817116fae0c2f7777008b8a502a48"
+    },
+    {
+      "kind": "local",
+      "locator": "../data/input.csv",
+      "sha256": "ceb69069c8e7b6edf697f3d41c4bd7f8294a40412228d563a1322748f9933e7b"
+    }
+  ],
+  "evidence": [
+    {
+      "id": "E1",
+      "kind": "local",
+      "locator": "../out/report.md",
+      "artifact_revision": "8b91ffacf576",
+      "observed_at": "2026-10-26T08:40:00Z",
+      "result": "pass"
+    },
+    {
+      "id": "E2",
+      "kind": "local",
+      "locator": "../data/input.csv",
+      "artifact_revision": "8b91ffacf576",
+      "observed_at": "2026-10-27T15:10:00Z",
+      "result": "pass"
+    }
+  ]
+}

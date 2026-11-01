@@ -1,0 +1,83 @@
+{
+  "schema_version": 2,
+  "task_id": "batch-report",
+  "goal": "publish the batch report",
+  "status": "complete",
+  "next_action": "Deliver the batch report to the user",
+  "provenance": {
+    "generated_at": "2026-10-29T10:05:00Z",
+    "writer": "agent",
+    "derived_from": null
+  },
+  "constraints": [],
+  "milestones": [],
+  "acceptance": [
+    {
+      "id": "C1",
+      "criterion": "out/report.md states the rendered batch report",
+      "status": "verified",
+      "evidence_ids": [
+        "E1"
+      ]
+    },
+    {
+      "id": "C2",
+      "criterion": "the dataset totals are recomputed from data/data.csv",
+      "status": "verified",
+      "evidence_ids": [
+        "E2"
+      ]
+    }
+  ],
+  "artifacts": [
+    {
+      "id": "A1",
+      "kind": "local",
+      "locator": "../out/report.md",
+      "sha256": "74b51610f0c44845d6ecd10c04b4f766c738490b58cafcc5e5da42af459fdb0b",
+      "revision": "74b51610f0c4"
+    },
+    {
+      "id": "A2",
+      "kind": "local",
+      "locator": "../data/data.csv",
+      "sha256": "947ca52b6b9cd0c3796e31a6fa18c03c83734bdd1c8970411b4fde1072d19782",
+      "revision": "947ca52b6b9c"
+    }
+  ],
+  "evidence": [
+    {
+      "id": "E1",
+      "kind": "local",
+      "locator": "../out/report.md",
+      "artifact_ids": [
+        "A1"
+      ],
+      "artifact_revisions": {
+        "A1": "74b51610f0c4"
+      },
+      "observed_at": "2026-10-26T08:40:00Z",
+      "result": "pass"
+    },
+    {
+      "id": "E2",
+      "kind": "local",
+      "locator": "../data/data.csv",
+      "artifact_ids": [
+        "A2"
+      ],
+      "artifact_revisions": {
+        "A2": "947ca52b6b9c"
+      },
+      "observed_at": "2026-10-29T10:05:00Z",
+      "result": "pass"
+    }
+  ],
+  "blockers": [],
+  "attempts": [],
+  "decisions": [],
+  "capabilities": [],
+  "lessons": [],
+  "shortcuts": [],
+  "waivers": []
+}

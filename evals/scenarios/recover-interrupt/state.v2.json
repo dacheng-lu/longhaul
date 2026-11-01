@@ -1,0 +1,89 @@
+{
+  "schema_version": 2,
+  "task_id": "parts-job",
+  "goal": "finish the parts pipeline",
+  "status": "in_progress",
+  "next_action": "Run scripts/make_parts.py to write out/part3.md",
+  "provenance": {
+    "generated_at": "2026-10-26T08:40:00Z",
+    "writer": "agent",
+    "derived_from": null
+  },
+  "constraints": [],
+  "milestones": [],
+  "acceptance": [
+    {
+      "id": "C1",
+      "criterion": "out/part1.md exists and lists the cleaned row count",
+      "status": "verified",
+      "evidence_ids": [
+        "E1"
+      ]
+    },
+    {
+      "id": "C2",
+      "criterion": "out/part2.md exists and lists the normalized row count",
+      "status": "verified",
+      "evidence_ids": [
+        "E2"
+      ]
+    },
+    {
+      "id": "C3",
+      "criterion": "out/part3.md reports the batch total",
+      "status": "pending",
+      "evidence_ids": []
+    }
+  ],
+  "artifacts": [
+    {
+      "id": "A1",
+      "kind": "local",
+      "locator": "../out/part1.md",
+      "sha256": "54a3079fc1eb1f9f1224c8f14c1ccc7e414fdaef684f990ae79f19cb5f898645",
+      "revision": "54a3079fc1eb"
+    },
+    {
+      "id": "A2",
+      "kind": "local",
+      "locator": "../out/part2.md",
+      "sha256": "556a423ca63ba2d22f0ddf74fdd95fe1997138701527571807b34927f15236cf",
+      "revision": "556a423ca63b"
+    }
+  ],
+  "evidence": [
+    {
+      "id": "E1",
+      "kind": "local",
+      "locator": "../out/part1.md",
+      "artifact_ids": [
+        "A1"
+      ],
+      "artifact_revisions": {
+        "A1": "54a3079fc1eb"
+      },
+      "observed_at": "2026-10-26T08:40:00Z",
+      "result": "pass"
+    },
+    {
+      "id": "E2",
+      "kind": "local",
+      "locator": "../out/part2.md",
+      "artifact_ids": [
+        "A2"
+      ],
+      "artifact_revisions": {
+        "A2": "556a423ca63b"
+      },
+      "observed_at": "2026-10-27T15:10:00Z",
+      "result": "pass"
+    }
+  ],
+  "blockers": [],
+  "attempts": [],
+  "decisions": [],
+  "capabilities": [],
+  "lessons": [],
+  "shortcuts": [],
+  "waivers": []
+}

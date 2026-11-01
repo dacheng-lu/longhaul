@@ -1,0 +1,48 @@
+name: ci
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        # Linux only (v1.2): the checkpoint CLI needs descriptor-anchored path
+        # traversal (openat/fstat with O_NOFOLLOW, os.replace with directory
+        # descriptors) and fails closed where the platform cannot provide it.
+        # The eval harness additionally needs bwrap. macOS and Windows satisfy
+        # neither prerequisite, so running them here would only produce red jobs
+        # that say nothing about the code.
+        os: [ubuntu-latest]
+        python: ['3.10', '3.12']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+      - name: install pytest
+        run: python -m pip install --disable-pip-version-check pytest
+      - name: install bubblewrap
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y --no-install-recommends bubblewrap
+      - name: prove that bwrap can start a sandbox
+        # bubblewrap is a hard prerequisite for the eval harness: a missing or
+        # unusable sandbox must fail this job, never skip the tests that need it.
+        # Ubuntu >= 23.10 restricts unprivileged user namespaces through AppArmor,
+        # so try the documented switch once before giving up.
+        run: |
+          if ! bwrap --ro-bind / / true; then
+            echo "bwrap cannot create an unprivileged sandbox; trying the AppArmor switch" >&2
+            sudo sysctl -w kernel.apparmor_restrict_unprivileged_userns=0 || true
+          fi
+          if ! bwrap --ro-bind / / true; then
+            echo "::error::bubblewrap does not work on this runner. It is a hard prerequisite for the eval harness, so the suite would only fail later; refusing here." >&2
+            exit 1
+          fi
+          bwrap --ro-bind / / --unshare-net true
+      - name: gate tests
+        run: python -m pytest tests -q

@@ -1,0 +1,63 @@
+{
+  "schema_version": 1,
+  "task_id": "batch-report",
+  "goal": "publish the batch report",
+  "artifact_revision": "e29d7ac2963e",
+  "status": "in_progress",
+  "next_action": "Re-verify the dataset totals against the current data/data.csv",
+  "constraints": [],
+  "milestones": [],
+  "acceptance": [
+    {
+      "id": "C1",
+      "criterion": "out/report.md states the rendered batch report",
+      "status": "verified",
+      "evidence_ids": [
+        "E1"
+      ]
+    },
+    {
+      "id": "C2",
+      "criterion": "the dataset totals are recomputed from data/data.csv",
+      "status": "verified",
+      "evidence_ids": [
+        "E2"
+      ]
+    }
+  ],
+  "blockers": [],
+  "attempts": [],
+  "decisions": [],
+  "capabilities": [],
+  "lessons": [],
+  "deliverables": [
+    {
+      "kind": "local",
+      "locator": "../out/report.md",
+      "sha256": "74b51610f0c44845d6ecd10c04b4f766c738490b58cafcc5e5da42af459fdb0b"
+    },
+    {
+      "kind": "local",
+      "locator": "../data/data.csv",
+      "sha256": "e29d7ac2963e1bf566de7da91d242524b066d049142938bd3932e79df4ca11de"
+    }
+  ],
+  "evidence": [
+    {
+      "id": "E1",
+      "kind": "local",
+      "locator": "../out/report.md",
+      "artifact_revision": "e29d7ac2963e",
+      "observed_at": "2026-10-26T08:40:00Z",
+      "result": "pass"
+    },
+    {
+      "id": "E2",
+      "kind": "local",
+      "locator": "../data/data.csv",
+      "artifact_revision": "e29d7ac2963e",
+      "observed_at": "2026-10-27T15:10:00Z",
+      "result": "pass"
+    }
+  ]
+}

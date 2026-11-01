@@ -1,0 +1,81 @@
+{
+  "schema_version": 2,
+  "task_id": "orders-export",
+  "goal": "export the order table",
+  "status": "complete",
+  "next_action": "Deliver the export to the user",
+  "provenance": {
+    "generated_at": "2026-10-29T10:05:00Z",
+    "writer": "agent",
+    "derived_from": null
+  },
+  "constraints": [],
+  "milestones": [],
+  "acceptance": [
+    {
+      "id": "C1",
+      "criterion": "out/export.csv contains the orders in CSV form",
+      "status": "verified",
+      "evidence_ids": [
+        "E2"
+      ]
+    }
+  ],
+  "artifacts": [
+    {
+      "id": "A1",
+      "kind": "local",
+      "locator": "../data/orders.csv",
+      "sha256": "001d8b0f9da8d43b6ff3dcee5a5d15d78a8c3839b69af8477eabb4aad0baf8f5",
+      "revision": "001d8b0f9da8"
+    },
+    {
+      "id": "A2",
+      "kind": "local",
+      "locator": "../out/export.csv",
+      "sha256": "001d8b0f9da8d43b6ff3dcee5a5d15d78a8c3839b69af8477eabb4aad0baf8f5",
+      "revision": "001d8b0f9da8"
+    }
+  ],
+  "evidence": [
+    {
+      "id": "E1",
+      "kind": "local",
+      "locator": "../data/orders.csv",
+      "artifact_ids": [
+        "A1"
+      ],
+      "artifact_revisions": {
+        "A1": "001d8b0f9da8"
+      },
+      "observed_at": "2026-10-26T08:40:00Z",
+      "result": "pass"
+    },
+    {
+      "id": "E2",
+      "kind": "local",
+      "locator": "../out/export.csv",
+      "artifact_ids": [
+        "A2"
+      ],
+      "artifact_revisions": {
+        "A2": "001d8b0f9da8"
+      },
+      "observed_at": "2026-10-29T10:05:00Z",
+      "result": "pass"
+    }
+  ],
+  "blockers": [],
+  "attempts": [],
+  "decisions": [
+    {
+      "id": "D1",
+      "text": "CSV, decided by user",
+      "at": "2026-10-26T08:40:00Z"
+    }
+  ],
+  "capabilities": [],
+  "lessons": [],
+  "shortcuts": [],
+  "waivers": []
+}

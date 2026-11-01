@@ -1,0 +1,46 @@
+{
+  "schema_version": 1,
+  "task_id": "orders-export",
+  "goal": "export the order table",
+  "artifact_revision": "001d8b0f9da8",
+  "status": "in_progress",
+  "next_action": "Write out/export.csv from data/orders.csv",
+  "constraints": [],
+  "milestones": [],
+  "acceptance": [
+    {
+      "id": "C1",
+      "criterion": "out/export.csv contains the orders in CSV form",
+      "status": "pending",
+      "evidence_ids": []
+    }
+  ],
+  "blockers": [],
+  "attempts": [],
+  "decisions": [
+    {
+      "id": "D1",
+      "text": "CSV, decided by user",
+      "at": "2026-10-26T08:40:00Z"
+    }
+  ],
+  "capabilities": [],
+  "lessons": [],
+  "deliverables": [
+    {
+      "kind": "local",
+      "locator": "../data/orders.csv",
+      "sha256": "001d8b0f9da8d43b6ff3dcee5a5d15d78a8c3839b69af8477eabb4aad0baf8f5"
+    }
+  ],
+  "evidence": [
+    {
+      "id": "E1",
+      "kind": "local",
+      "locator": "../data/orders.csv",
+      "artifact_revision": "001d8b0f9da8",
+      "observed_at": "2026-10-26T08:40:00Z",
+      "result": "pass"
+    }
+  ]
+}

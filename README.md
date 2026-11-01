@@ -14,7 +14,7 @@
 
 [English](#english) · [简体中文](#zh-cn) · [Deutsch](#deutsch)
 
-Skill version: **1.1** · [Core protocol / 核心流程 / Kernprotokoll](SKILL.md) · [Apache-2.0](LICENSE)
+Skill version: **1.2** · [Core protocol / 核心流程 / Kernprotokoll](SKILL.md) · [Apache-2.0](LICENSE)
 
 ## English
 
@@ -64,7 +64,7 @@ Check the actual artifacts and evidence before continuing with the next action.
 
 ### Checkpoint helper
 
-The helper uses the Python 3 standard library and makes no network requests. From the repository root:
+The helper uses the Python 3 standard library and makes no network requests. **It is Linux-only in v1.2:** every path is walked through directory descriptors with `O_NOFOLLOW` (descriptor-anchored traversal), and a platform that cannot provide that is refused instead of falling back to `realpath()`, so macOS and Windows are not supported. From the repository root:
 
 ```bash
 python3 scripts/checkpoint.py init ../longhaul-state/task.json --task-id demo-001 --goal "Produce a verified research brief"
@@ -85,6 +85,8 @@ Keep task state outside the installed skill directory and persist it through the
 - Tool access, installation, permissions, persistence and model selection depend on the host. Unsupported delegation falls back to sequential work.
 - Passing the checkpoint gate is not proof that the work is correct. Domain-specific validation is still required.
 - SECI is an engineering analogy here: storing a lesson does not update model weights or demonstrate learning. Rune labels are optional diagnostic aids, not evidence.
+- The eval harness compares conditions on fixed fixture scenarios; a higher score is comparative evidence about the skill, not a guarantee that your task's result is correct.
+- A live model evaluation is **blocked**: no credential boundary can be proven against an untrusted subject, so no runner API reads, copies or accepts a key and the harness runs the verified offline test double only. A future live pilot needs an authorized, independently audited credential broker.
 
 ### Contributing
 
@@ -142,7 +144,7 @@ Useful contributions include reproducible recovery scenarios, clearer host setup
 
 ### 检查点脚本
 
-脚本仅使用 Python 3 标准库，不发起网络请求。在仓库根目录运行：
+脚本仅使用 Python 3 标准库，不发起网络请求。**v1.2 仅支持 Linux（Linux-only）**：所有路径都通过目录描述符配合 `O_NOFOLLOW` 逐段遍历（descriptor-anchored），无法提供该能力的平台会被直接拒绝，而不会退回 `realpath()`，因此不支持 macOS 与 Windows。在仓库根目录运行：
 
 ```bash
 python3 scripts/checkpoint.py init ../longhaul-state/task.json --task-id demo-001 --goal "完成经过核验的研究简报"
@@ -163,6 +165,8 @@ python3 scripts/checkpoint.py gate ../longhaul-state/task.json
 - 工具接入、安装、权限、持久化与模型选择取决于宿主；无法委派时，改为顺序执行。
 - 检查点通过不等于内容正确，仍需完成领域内的质量验证。
 - SECI 在这里是工程类比：保存经验不代表更新模型权重，也不能单独证明学习有效。符文标签仅用于辅助诊断。
+- 评测框架只在固定场景上比较不同条件；得分只是关于 Skill 的相对证据，不代表你的任务结果一定正确。
+- 真实模型的在线评测目前**被阻断**：无法证明凭证边界对不受信任的受测方成立，因此任何运行器接口都不读取、不复制、不接受密钥，评测只运行经过校验的离线测试替身。未来的在线试点需要单独授权并独立审计的凭证代理。
 
 ### 参与改进
 
@@ -219,7 +223,7 @@ Prüfe die tatsächlichen Artefakte und Belege, bevor du weiterarbeitest.
 
 ### Checkpoint-Hilfsskript
 
-Das Skript verwendet ausschließlich die Python-3-Standardbibliothek und sendet keine Netzwerkanfragen. Im Stammverzeichnis des Repositorys ausführen:
+Das Skript verwendet ausschließlich die Python-3-Standardbibliothek und sendet keine Netzwerkanfragen. **Unterstützt wird in v1.2 nur Linux (Linux-only):** jeder Pfad wird über Verzeichnis-Deskriptoren mit `O_NOFOLLOW` komponentenweise durchlaufen (descriptor-anchored); eine Plattform, die das nicht bereitstellt, wird abgelehnt statt auf `realpath()` zurückzufallen. macOS und Windows werden daher nicht unterstützt. Im Stammverzeichnis des Repositorys ausführen:
 
 ```bash
 python3 scripts/checkpoint.py init ../longhaul-state/task.json --task-id demo-001 --goal "Einen geprüften Recherchebericht erstellen"
@@ -240,6 +244,8 @@ Den Aufgabenstand außerhalb des installierten Skill-Verzeichnisses ablegen und 
 - Werkzeugzugriff, Installation, Berechtigungen, Speicherung und Modellauswahl hängen von der Host-Umgebung ab. Ohne Delegationsfunktion wird sequenziell gearbeitet.
 - Eine bestandene Checkpoint-Prüfung beweist nicht die Richtigkeit der Ergebnisse. Fachspezifische Qualitätsprüfungen bleiben erforderlich.
 - SECI dient hier als technische Analogie: Das Speichern einer Erkenntnis verändert keine Modellgewichte und belegt noch keinen Lernerfolg. Runenbezeichnungen sind optionale Diagnosehilfen.
+- Die Eval-Harness vergleicht Bedingungen an festen Szenarien; ein höherer Score ist ein vergleichender Beleg über den Skill, keine Garantie für die Richtigkeit der eigenen Aufgabe.
+- Eine Live-Evaluierung mit echtem Modell ist **blockiert**: Eine Credential-Grenze lässt sich gegenüber einem nicht vertrauenswürdigen Subjekt nicht beweisen, daher liest, kopiert und akzeptiert keine Runner-API einen Schlüssel; die Harness führt nur den geprüften Offline-Testdoppelgänger aus. Ein späterer Live-Pilot braucht einen autorisierten, unabhängig geprüften Credential-Broker.
 
 ### Mitwirken
 

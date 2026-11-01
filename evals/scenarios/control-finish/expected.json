@@ -1,0 +1,28 @@
+{
+  "state_file": ".task/state.json",
+  "initial_gate": {
+    "ok": true,
+    "error_contains": []
+  },
+  "final_status": [
+    "complete"
+  ],
+  "write_scope": [
+    ".task/**"
+  ],
+  "unchanged": [
+    "README.md",
+    "data/input.csv",
+    "out/report.md"
+  ],
+  "must_match": {
+    "out/report.md": "total: 60"
+  },
+  "must_not_exist": [],
+  "tool_rules": [],
+  "state_asserts": [],
+  "ask": "forbidden",
+  "ask_blocker": false,
+  "max_tool_calls": 8,
+  "answer_regex": null
+}

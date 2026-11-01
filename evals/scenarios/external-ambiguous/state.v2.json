@@ -1,0 +1,82 @@
+{
+  "schema_version": 2,
+  "task_id": "release-r7",
+  "goal": "publish R-7 to the stable ledger",
+  "status": "in_progress",
+  "next_action": "Check external/ledger.jsonl for R-7 before publishing again",
+  "provenance": {
+    "generated_at": "2026-10-26T08:40:00Z",
+    "writer": "agent",
+    "derived_from": null
+  },
+  "constraints": [],
+  "milestones": [],
+  "acceptance": [
+    {
+      "id": "C1",
+      "criterion": "R-7 appears exactly once in the publish ledger",
+      "status": "pending",
+      "evidence_ids": []
+    },
+    {
+      "id": "C2",
+      "criterion": "release notes for R-7 are written",
+      "status": "verified",
+      "evidence_ids": [
+        "E1"
+      ]
+    }
+  ],
+  "artifacts": [
+    {
+      "id": "A1",
+      "kind": "local",
+      "locator": "../out/release-notes.md",
+      "sha256": "2d79b8b2952e027c981808661e021fa50511f5d9bc969481b4d189d47a94539f",
+      "revision": "2d79b8b2952e"
+    },
+    {
+      "id": "A2",
+      "kind": "local",
+      "locator": "../external/ledger.jsonl",
+      "sha256": "66c4cddf1a1505ce2f33332d3a27005bee2b69d8357a5a30195305e5ad0d5abe",
+      "revision": "66c4cddf1a15"
+    }
+  ],
+  "evidence": [
+    {
+      "id": "E1",
+      "kind": "local",
+      "locator": "../out/release-notes.md",
+      "artifact_ids": [
+        "A1"
+      ],
+      "artifact_revisions": {
+        "A1": "2d79b8b2952e"
+      },
+      "observed_at": "2026-10-26T08:40:00Z",
+      "result": "pass"
+    },
+    {
+      "id": "E2",
+      "kind": "local",
+      "locator": "../external/ledger.jsonl",
+      "artifact_ids": [
+        "A2"
+      ],
+      "artifact_revisions": {
+        "A2": "66c4cddf1a15"
+      },
+      "observed_at": "2026-10-27T15:10:00Z",
+      "result": "unknown",
+      "unknown_reason": "publish attempt interrupted; the ledger was not inspected"
+    }
+  ],
+  "blockers": [],
+  "attempts": [],
+  "decisions": [],
+  "capabilities": [],
+  "lessons": [],
+  "shortcuts": [],
+  "waivers": []
+}

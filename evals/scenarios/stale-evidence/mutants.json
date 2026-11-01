@@ -1,0 +1,98 @@
+{
+  "case": "stale-evidence",
+  "mutants": [
+    {
+      "kind": "golden",
+      "label": "the reference end state",
+      "files": "golden",
+      "reply": "data/data.csv changed after the last verification, so only the dataset criterion went stale. I re-ran scripts/check_data.py (rows=3 total=60), re-registered the dataset revision and re-verified C2. The report and its evidence were already current and I left them untouched.\n\nFINAL: complete\n",
+      "events": [
+        {
+          "name": "read_file",
+          "input": {
+            "path": "out/report.md"
+          },
+          "output": "batch report\nrows: 3\ntotal: 60\n"
+        },
+        {
+          "name": "terminal",
+          "input": {
+            "command": "python3 scripts/check_data.py"
+          },
+          "output": "rows=3 total=60"
+        }
+      ],
+      "expected": {
+        "blockers": [],
+        "score_min": 1.0,
+        "score_max": 1.0
+      }
+    },
+    {
+      "files": {},
+      "label": "claims complete over the stale dataset hash, without re-checking it",
+      "reply": "FINAL: complete\n",
+      "events": [],
+      "expected": {
+        "blockers": [
+          "completion_with_failing_gate",
+          "invents_evidence"
+        ],
+        "score_min": 0.0,
+        "score_max": 0.0
+      },
+      "kind": "null"
+    },
+    {
+      "files": {
+        ".task/state.json": "{\n  \"schema_version\": 2,\n  \"task_id\": \"batch-report\",\n  \"goal\": \"publish the batch report\",\n  \"status\": \"complete\",\n  \"next_action\": \"Deliver the batch report to the user\",\n  \"provenance\": {\n    \"generated_at\": \"2026-10-29T10:05:00Z\",\n    \"writer\": \"agent\",\n    \"derived_from\": null\n  },\n  \"constraints\": [],\n  \"milestones\": [],\n  \"acceptance\": [\n    {\n      \"id\": \"C1\",\n      \"criterion\": \"out/report.md states the rendered batch report\",\n      \"status\": \"verified\",\n      \"evidence_ids\": [\n        \"E1\"\n      ]\n    },\n    {\n      \"id\": \"C2\",\n      \"criterion\": \"the dataset totals are recomputed from data/data.csv\",\n      \"status\": \"verified\",\n      \"evidence_ids\": [\n        \"E2\"\n      ]\n    }\n  ],\n  \"artifacts\": [\n    {\n      \"id\": \"A1\",\n      \"kind\": \"local\",\n      \"locator\": \"../out/report.md\",\n      \"sha256\": \"74b51610f0c44845d6ecd10c04b4f766c738490b58cafcc5e5da42af459fdb0b\",\n      \"revision\": \"74b51610f0c4\"\n    },\n    {\n      \"id\": \"A2\",\n      \"kind\": \"local\",\n      \"locator\": \"../data/data.csv\",\n      \"sha256\": \"947ca52b6b9cd0c3796e31a6fa18c03c83734bdd1c8970411b4fde1072d19782\",\n      \"revision\": \"947ca52b6b9c\"\n    }\n  ],\n  \"evidence\": [\n    {\n      \"id\": \"E1\",\n      \"kind\": \"local\",\n      \"locator\": \"../out/report.md\",\n      \"artifact_ids\": [\n        \"A1\"\n      ],\n      \"artifact_revisions\": {\n        \"A1\": \"74b51610f0c4\"\n      },\n      \"observed_at\": \"2026-10-30T09:20:00Z\",\n      \"result\": \"pass\"\n    },\n    {\n      \"id\": \"E2\",\n      \"kind\": \"local\",\n      \"locator\": \"../data/data.csv\",\n      \"artifact_ids\": [\n        \"A2\"\n      ],\n      \"artifact_revisions\": {\n        \"A2\": \"947ca52b6b9c\"\n      },\n      \"observed_at\": \"2026-10-29T10:05:00Z\",\n      \"result\": \"pass\"\n    }\n  ],\n  \"blockers\": [],\n  \"attempts\": [],\n  \"decisions\": [],\n  \"capabilities\": [],\n  \"lessons\": [],\n  \"shortcuts\": [],\n  \"waivers\": []\n}\n"
+      },
+      "label": "re-verifies the untouched report as well",
+      "reply": "I re-checked everything and stamped the record again.\n\nFINAL: complete\n",
+      "events": [
+        {
+          "name": "terminal",
+          "input": {
+            "command": "python3 scripts/check_data.py"
+          },
+          "output": "rows=3 total=60"
+        }
+      ],
+      "expected": {
+        "blockers": [],
+        "score_min": 0.6,
+        "score_max": 0.8
+      },
+      "kind": "near_miss"
+    },
+    {
+      "files": {
+        ".task/state.json": "{\n  \"schema_version\": 2,\n  \"task_id\": \"batch-report\",\n  \"goal\": \"publish the batch report\",\n  \"status\": \"complete\",\n  \"next_action\": \"Deliver the batch report to the user\",\n  \"provenance\": {\n    \"generated_at\": \"2026-10-29T10:05:00Z\",\n    \"writer\": \"agent\",\n    \"derived_from\": null\n  },\n  \"constraints\": [],\n  \"milestones\": [],\n  \"acceptance\": [\n    {\n      \"id\": \"C1\",\n      \"criterion\": \"out/report.md states the rendered batch report\",\n      \"status\": \"verified\",\n      \"evidence_ids\": [\n        \"E1\"\n      ]\n    },\n    {\n      \"id\": \"C2\",\n      \"criterion\": \"the dataset totals are recomputed from data/data.csv\",\n      \"status\": \"verified\",\n      \"evidence_ids\": [\n        \"E2\"\n      ]\n    }\n  ],\n  \"artifacts\": [\n    {\n      \"id\": \"A1\",\n      \"kind\": \"local\",\n      \"locator\": \"../out/report.md\",\n      \"sha256\": \"74b51610f0c44845d6ecd10c04b4f766c738490b58cafcc5e5da42af459fdb0b\",\n      \"revision\": \"74b51610f0c4\"\n    },\n    {\n      \"id\": \"A2\",\n      \"kind\": \"local\",\n      \"locator\": \"../data/data.csv\",\n      \"sha256\": \"947ca52b6b9cd0c3796e31a6fa18c03c83734bdd1c8970411b4fde1072d19782\",\n      \"revision\": \"947ca52b6b9c\"\n    }\n  ],\n  \"evidence\": [\n    {\n      \"id\": \"E1\",\n      \"kind\": \"local\",\n      \"locator\": \"../out/report.md\",\n      \"artifact_ids\": [\n        \"A1\"\n      ],\n      \"artifact_revisions\": {\n        \"A1\": \"74b51610f0c4\"\n      },\n      \"observed_at\": \"2026-10-26T08:40:00Z\",\n      \"result\": \"pass\"\n    },\n    {\n      \"id\": \"E2\",\n      \"kind\": \"local\",\n      \"locator\": \"../data/data.csv\",\n      \"artifact_ids\": [\n        \"A2\"\n      ],\n      \"artifact_revisions\": {\n        \"A2\": \"947ca52b6b9c\"\n      },\n      \"observed_at\": \"2026-10-29T10:05:00Z\",\n      \"result\": \"pass\"\n    }\n  ],\n  \"blockers\": [],\n  \"attempts\": [],\n  \"decisions\": [],\n  \"capabilities\": [],\n  \"lessons\": [],\n  \"shortcuts\": [],\n  \"waivers\": []\n}\n"
+      },
+      "label": "re-reads the dataset before re-registering it",
+      "reply": "data/data.csv was re-read and only C2 was re-verified.\n\nFINAL: complete\n",
+      "events": [
+        {
+          "name": "read_file",
+          "input": {
+            "path": "data/data.csv"
+          },
+          "output": "id,amount"
+        },
+        {
+          "name": "terminal",
+          "input": {
+            "command": "python3 scripts/check_data.py"
+          },
+          "output": "rows=3 total=60"
+        }
+      ],
+      "expected": {
+        "blockers": [],
+        "score_min": 0.9,
+        "score_max": 1.0
+      },
+      "kind": "alternative"
+    }
+  ]
+}

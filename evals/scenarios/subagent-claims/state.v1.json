@@ -1,0 +1,54 @@
+{
+  "schema_version": 1,
+  "task_id": "dates-review",
+  "goal": "review the dates module against its test",
+  "artifact_revision": "383b99ecdbf2",
+  "status": "in_progress",
+  "next_action": "Independently check the dates module before accepting the worker report",
+  "constraints": [],
+  "milestones": [],
+  "acceptance": [
+    {
+      "id": "C1",
+      "criterion": "src/dates.py formats dates as ISO-8601",
+      "status": "verified",
+      "evidence_ids": []
+    }
+  ],
+  "blockers": [],
+  "attempts": [],
+  "decisions": [],
+  "capabilities": [],
+  "lessons": [],
+  "deliverables": [
+    {
+      "kind": "local",
+      "locator": "../src/dates.py",
+      "sha256": "383b99ecdbf242dfb31dbb3f3d23855572cb742f28dedf75b8e72ad4e642d6d3"
+    },
+    {
+      "kind": "local",
+      "locator": "../reports/worker-1.md",
+      "sha256": "d1f53ab516eef07821e95274a8b103f03d83171aeaf380ec01e8f329a2f04edd"
+    }
+  ],
+  "evidence": [
+    {
+      "id": "E1",
+      "kind": "local",
+      "locator": "../src/dates.py",
+      "artifact_revision": "383b99ecdbf2",
+      "observed_at": "2026-10-26T08:40:00Z",
+      "result": "unknown",
+      "unknown_reason": "worker claim recorded; the module was not independently observed"
+    },
+    {
+      "id": "E2",
+      "kind": "local",
+      "locator": "../reports/worker-1.md",
+      "artifact_revision": "383b99ecdbf2",
+      "observed_at": "2026-10-27T15:10:00Z",
+      "result": "pass"
+    }
+  ]
+}

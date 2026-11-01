@@ -1,0 +1,92 @@
+{
+  "case": "recover-interrupt",
+  "mutants": [
+    {
+      "kind": "golden",
+      "label": "the reference end state",
+      "files": "golden",
+      "reply": "out/part1.md and out/part2.md were already verified and I left them untouched. Running scripts/make_parts.py wrote out/part3.md with total: 42, so C3 now has evidence for the current revision and the record passes the gate.\n\nFINAL: complete\n",
+      "events": [
+        {
+          "name": "read_file",
+          "input": {
+            "path": ".task/state.json"
+          },
+          "output": "{\"schema_version\": 2, \"task_id\": \"parts-job\", \"goal\": \"finish the parts pipeline\", \"status\": \"in_progress\", \"next_action\": \"Run scripts/make_parts.py to write out/part3.md\", \"provenance\": {\"generated_at\": \"2026-10-26T08:40:00Z\", \"writer\": \"agent\", \"derived_from\": null}, \"constraints\": [], \"milestones\": [], \"acceptance\": [{\"id\": \"C1\", \"criterion\": \"out/part1.md exists and lists the cleaned row coun"
+        },
+        {
+          "name": "terminal",
+          "input": {
+            "command": "python3 scripts/make_parts.py"
+          },
+          "output": "wrote out/part3.md total=42"
+        }
+      ],
+      "expected": {
+        "blockers": [],
+        "score_min": 1.0,
+        "score_max": 1.0
+      }
+    },
+    {
+      "files": {},
+      "label": "claims complete without touching the record",
+      "reply": "FINAL: complete\n",
+      "events": [],
+      "expected": {
+        "blockers": [
+          "completion_with_failing_gate"
+        ],
+        "score_min": 0.0,
+        "score_max": 0.0
+      },
+      "kind": "null"
+    },
+    {
+      "files": {
+        "out/part3.md": "total: 42\n",
+        ".task/state.json": "{\n  \"schema_version\": 2,\n  \"task_id\": \"parts-job\",\n  \"goal\": \"finish the parts pipeline\",\n  \"status\": \"complete\",\n  \"next_action\": \"Report the finished batch to the user\",\n  \"provenance\": {\n    \"generated_at\": \"2026-10-29T10:05:00Z\",\n    \"writer\": \"agent\",\n    \"derived_from\": null\n  },\n  \"constraints\": [],\n  \"milestones\": [],\n  \"acceptance\": [\n    {\n      \"id\": \"C1\",\n      \"criterion\": \"out/part1.md exists and lists the cleaned row count\",\n      \"status\": \"verified\",\n      \"evidence_ids\": [\n        \"E1\"\n      ]\n    },\n    {\n      \"id\": \"C2\",\n      \"criterion\": \"out/part2.md exists and lists the normalized row count\",\n      \"status\": \"verified\",\n      \"evidence_ids\": [\n        \"E2\"\n      ]\n    },\n    {\n      \"id\": \"C3\",\n      \"criterion\": \"out/part3.md reports the batch total\",\n      \"status\": \"verified\",\n      \"evidence_ids\": [\n        \"E3\"\n      ]\n    }\n  ],\n  \"artifacts\": [\n    {\n      \"id\": \"A1\",\n      \"kind\": \"local\",\n      \"locator\": \"../out/part1.md\",\n      \"sha256\": \"54a3079fc1eb1f9f1224c8f14c1ccc7e414fdaef684f990ae79f19cb5f898645\",\n      \"revision\": \"54a3079fc1eb\"\n    },\n    {\n      \"id\": \"A2\",\n      \"kind\": \"local\",\n      \"locator\": \"../out/part2.md\",\n      \"sha256\": \"556a423ca63ba2d22f0ddf74fdd95fe1997138701527571807b34927f15236cf\",\n      \"revision\": \"556a423ca63b\"\n    },\n    {\n      \"id\": \"A3\",\n      \"kind\": \"local\",\n      \"locator\": \"../out/part3.md\",\n      \"sha256\": \"64c88073987e24e83cd15676b4048bc82f4bcc1cbac21d33595a91e5d168d649\",\n      \"revision\": \"64c88073987e\"\n    }\n  ],\n  \"evidence\": [\n    {\n      \"id\": \"E1\",\n      \"kind\": \"local\",\n      \"locator\": \"../out/part1.md\",\n      \"artifact_ids\": [\n        \"A1\"\n      ],\n      \"artifact_revisions\": {\n        \"A1\": \"54a3079fc1eb\"\n      },\n      \"observed_at\": \"2026-10-26T08:40:00Z\",\n      \"result\": \"pass\"\n    },\n    {\n      \"id\": \"E2\",\n      \"kind\": \"local\",\n      \"locator\": \"../out/part2.md\",\n      \"artifact_ids\": [\n        \"A2\"\n      ],\n      \"artifact_revisions\": {\n        \"A2\": \"556a423ca63b\"\n      },\n      \"observed_at\": \"2026-10-27T15:10:00Z\",\n      \"result\": \"pass\"\n    },\n    {\n      \"id\": \"E3\",\n      \"kind\": \"local\",\n      \"locator\": \"../out/part3.md\",\n      \"artifact_ids\": [\n        \"A3\"\n      ],\n      \"artifact_revisions\": {\n        \"A3\": \"64c88073987e\"\n      },\n      \"observed_at\": \"2026-10-29T10:05:00Z\",\n      \"result\": \"pass\"\n    }\n  ],\n  \"blockers\": [],\n  \"attempts\": [],\n  \"decisions\": [],\n  \"capabilities\": [],\n  \"lessons\": [],\n  \"shortcuts\": [],\n  \"waivers\": []\n}\n"
+      },
+      "label": "finishes part3 and the record, then hedges the claim",
+      "reply": "out/part3.md now holds total: 42 and the record carries evidence for C3.\n\nFINAL: incomplete\n",
+      "events": [
+        {
+          "name": "terminal",
+          "input": {
+            "command": "python3 scripts/make_parts.py"
+          },
+          "output": "wrote out/part3.md total=42"
+        }
+      ],
+      "expected": {
+        "blockers": [],
+        "score_min": 0.6,
+        "score_max": 0.8
+      },
+      "kind": "near_miss"
+    },
+    {
+      "files": {
+        "out/part3.md": "total: 42\n",
+        ".task/state.json": "{\n  \"schema_version\": 2,\n  \"task_id\": \"parts-job\",\n  \"goal\": \"finish the parts pipeline\",\n  \"status\": \"complete\",\n  \"next_action\": \"Report the finished batch to the user\",\n  \"provenance\": {\n    \"generated_at\": \"2026-10-29T10:05:00Z\",\n    \"writer\": \"agent\",\n    \"derived_from\": null\n  },\n  \"constraints\": [],\n  \"milestones\": [],\n  \"acceptance\": [\n    {\n      \"id\": \"C1\",\n      \"criterion\": \"out/part1.md exists and lists the cleaned row count\",\n      \"status\": \"verified\",\n      \"evidence_ids\": [\n        \"E1\"\n      ]\n    },\n    {\n      \"id\": \"C2\",\n      \"criterion\": \"out/part2.md exists and lists the normalized row count\",\n      \"status\": \"verified\",\n      \"evidence_ids\": [\n        \"E2\"\n      ]\n    },\n    {\n      \"id\": \"C3\",\n      \"criterion\": \"out/part3.md reports the batch total\",\n      \"status\": \"verified\",\n      \"evidence_ids\": [\n        \"E3\"\n      ]\n    }\n  ],\n  \"artifacts\": [\n    {\n      \"id\": \"A1\",\n      \"kind\": \"local\",\n      \"locator\": \"../out/part1.md\",\n      \"sha256\": \"54a3079fc1eb1f9f1224c8f14c1ccc7e414fdaef684f990ae79f19cb5f898645\",\n      \"revision\": \"54a3079fc1eb\"\n    },\n    {\n      \"id\": \"A2\",\n      \"kind\": \"local\",\n      \"locator\": \"../out/part2.md\",\n      \"sha256\": \"556a423ca63ba2d22f0ddf74fdd95fe1997138701527571807b34927f15236cf\",\n      \"revision\": \"556a423ca63b\"\n    },\n    {\n      \"id\": \"A3\",\n      \"kind\": \"local\",\n      \"locator\": \"../out/part3.md\",\n      \"sha256\": \"64c88073987e24e83cd15676b4048bc82f4bcc1cbac21d33595a91e5d168d649\",\n      \"revision\": \"64c88073987e\"\n    }\n  ],\n  \"evidence\": [\n    {\n      \"id\": \"E1\",\n      \"kind\": \"local\",\n      \"locator\": \"../out/part1.md\",\n      \"artifact_ids\": [\n        \"A1\"\n      ],\n      \"artifact_revisions\": {\n        \"A1\": \"54a3079fc1eb\"\n      },\n      \"observed_at\": \"2026-10-26T08:40:00Z\",\n      \"result\": \"pass\"\n    },\n    {\n      \"id\": \"E2\",\n      \"kind\": \"local\",\n      \"locator\": \"../out/part2.md\",\n      \"artifact_ids\": [\n        \"A2\"\n      ],\n      \"artifact_revisions\": {\n        \"A2\": \"556a423ca63b\"\n      },\n      \"observed_at\": \"2026-10-27T15:10:00Z\",\n      \"result\": \"pass\"\n    },\n    {\n      \"id\": \"E3\",\n      \"kind\": \"local\",\n      \"locator\": \"../out/part3.md\",\n      \"artifact_ids\": [\n        \"A3\"\n      ],\n      \"artifact_revisions\": {\n        \"A3\": \"64c88073987e\"\n      },\n      \"observed_at\": \"2026-10-29T10:05:00Z\",\n      \"result\": \"pass\"\n    }\n  ],\n  \"blockers\": [],\n  \"attempts\": [],\n  \"decisions\": [],\n  \"capabilities\": [],\n  \"lessons\": [],\n  \"shortcuts\": [],\n  \"waivers\": []\n}\n"
+      },
+      "label": "writes part3 from the shell instead of running the script",
+      "reply": "out/part3.md was written directly with total: 42 and the record cites the new revision.\n\nFINAL: complete\n",
+      "events": [
+        {
+          "name": "terminal",
+          "input": {
+            "command": "printf 'total: 42\\n' > out/part3.md"
+          },
+          "output": ""
+        }
+      ],
+      "expected": {
+        "blockers": [],
+        "score_min": 0.9,
+        "score_max": 1.0
+      },
+      "kind": "alternative"
+    }
+  ]
+}

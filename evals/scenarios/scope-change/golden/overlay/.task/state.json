@@ -1,0 +1,74 @@
+{
+  "schema_version": 2,
+  "task_id": "summary-scope",
+  "goal": "deliver the summary for the batch",
+  "status": "complete",
+  "next_action": "Report the delivered summary to the user",
+  "provenance": {
+    "generated_at": "2026-10-29T10:05:00Z",
+    "writer": "agent",
+    "derived_from": null
+  },
+  "constraints": [],
+  "milestones": [],
+  "acceptance": [
+    {
+      "id": "C1",
+      "criterion": "out/summary.md totals match data/raw.csv",
+      "status": "verified",
+      "evidence_ids": [
+        "E1"
+      ]
+    },
+    {
+      "id": "C2",
+      "criterion": "the row count in out/summary.md matches the source",
+      "status": "verified",
+      "evidence_ids": [
+        "E1"
+      ]
+    }
+  ],
+  "artifacts": [
+    {
+      "id": "A1",
+      "kind": "local",
+      "locator": "../out/summary.md",
+      "sha256": "e1a2770ff13c87842d711c4549a74cbc982de38d30472f46efb34478439c30ac",
+      "revision": "e1a2770ff13c"
+    }
+  ],
+  "evidence": [
+    {
+      "id": "E1",
+      "kind": "local",
+      "locator": "../out/summary.md",
+      "artifact_ids": [
+        "A1"
+      ],
+      "artifact_revisions": {
+        "A1": "e1a2770ff13c"
+      },
+      "observed_at": "2026-10-26T08:40:00Z",
+      "result": "pass"
+    }
+  ],
+  "blockers": [],
+  "attempts": [],
+  "decisions": [
+    {
+      "id": "D1",
+      "text": "summary stays markdown; no HTML variant",
+      "at": "2026-10-26T08:40:00Z"
+    },
+    {
+      "id": "D2",
+      "text": "drop C3 (CSV export), decided by the user",
+      "at": "2026-10-29T10:05:00Z"
+    }
+  ],
+  "capabilities": [],
+  "lessons": [],
+  "shortcuts": [],
+  "waivers": []
+}
