@@ -37,6 +37,21 @@ Acceptance: prose, examples and tests agree on the same representative scenarios
 
 验收：相同场景下，协议、示例与测试结论一致；明确哪些保障需要宿主实现。
 
+## Known open findings — candidate v1.2.1 / 已知未修的审计发现
+
+Found by an independent audit of the v1.2 CI fix (the report is not in this repository). The audit rated the first three MINOR and the last one PLAN. Each was reproduced against `main` at `5611858` before being listed. None is fixed yet; this section records them and does not schedule them.
+
+由对 v1.2 CI 修复的独立审计发现（报告不在本仓库）。审计将前三项评为 MINOR，最后一项评为 PLAN。每一项都在 `main`（`5611858`）上重现过才列出。尚未修复；本节只记录，不排期。
+
+- [ ] `tests/test_release_contract.py`: `test_the_checkout_fetches_the_full_history` asserts `'fetch-depth: 0' in step`, a substring match that a commented-out line would also satisfy. Match the line itself.
+- [ ] `evals/scripts/casespec.py`: for the two control cases (`control-trivial`, `control-finish`) the validator accepts a dangling symlink at `golden/overlay` without an error (`validate` prints `"ok": true`).
+- [ ] `tests/test_eval_cases.py`: nothing shows that a control case still needs its `reply.md` and `events.jsonl` after the empty-overlay exemption. With that requirement removed from `_check_golden`, all 97 tests in the file still pass.
+- [ ] `tests/test_eval_runner.py`: the two pin tests skip on a shallow checkout instead of failing. With `CI` set they should fail, so a shallow checkout cannot pass silently.
+
+Acceptance: each item has a test that fails before the fix and passes after it, and the suite stays green on a fresh full-history clone with `TMPDIR`, `TEMP` and `TMP` unset.
+
+验收：每一项都有修复前失败、修复后通过的测试；在清除 `TMPDIR`、`TEMP`、`TMP` 的全新完整克隆里，整套测试仍为绿。
+
 ## P0 — v1.3: measure real benefit / 验证真实收益
 
 ### Experimental design
