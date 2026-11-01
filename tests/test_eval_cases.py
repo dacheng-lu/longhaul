@@ -226,6 +226,30 @@ class TestCorruptions:
     def test_a_clean_copy_stays_clean(self, tmp_path):
         assert errors_for(suite_copy(tmp_path)) == []
 
+    @pytest.mark.parametrize('case', [c for c in casespec.CASE_IDS
+                                      if c not in ('control-trivial', 'control-finish')])
+    def test_deleting_the_overlay_of_any_other_case_is_still_an_error(self, tmp_path, case):
+        """Only the two controls may lack `golden/overlay`. For every other case the overlay holds the
+        files of the golden end state; a validator that let them go would accept a damaged suite (a
+        blanket relaxation silently accepted subagent-claims and tool-unavailable)."""
+        clone = suite_copy(tmp_path)
+        shutil.rmtree(clone / 'scenarios' / case / 'golden' / 'overlay')
+        assert_error(errors_for(clone), 'case %s: golden/overlay missing' % case)
+
+    def test_a_git_checkout_without_the_empty_overlay_directories_is_clean(self, tmp_path):
+        """git cannot store an empty directory, so a fresh clone has no `golden/overlay` for the control
+        cases. An absent overlay is an empty overlay, not a damaged suite (CI found this on the first push:
+        the suite had only ever been validated in the working tree, where the directories existed)."""
+        clone = suite_copy(tmp_path)
+        for case in ('control-trivial', 'control-finish'):
+            overlay = clone / 'scenarios' / case / 'golden' / 'overlay'
+            if overlay.exists():  # present in a working tree (empty), absent in a clone: same suite
+                assert not any(overlay.iterdir()), case
+                overlay.rmdir()
+            assert not overlay.exists()
+        assert errors_for(clone) == []
+        assert casespec.golden_overlay_paths(clone, 'control-trivial') == []
+
     def test_seventh_key_in_a_case_row(self, tmp_path):
         clone = suite_copy(tmp_path)
         edit_rows(clone / 'cases.jsonl',

@@ -50,6 +50,10 @@ CASE_IDS = ('recover-interrupt', 'file-changed', 'stale-evidence', 'tool-unavail
             'external-ambiguous', 'subagent-claims', 'scope-change', 'repeat-question',
             'control-trivial', 'control-finish')
 
+# git cannot store an empty directory. The two controls, whose golden end state is the unchanged repo,
+# therefore may have no golden/overlay at all; every other case must have one.
+EMPTY_OVERLAY_IDS = ('control-trivial', 'control-finish')
+
 FINAL_CONTRACT = ('When you stop, end your reply with exactly one line: FINAL: complete, '
                   'FINAL: incomplete, or FINAL: blocked.')
 
@@ -758,7 +762,9 @@ def _check_golden(evals_dir, scenario, expected, row, oracle, repo_root, errors)
     overlay = golden / 'overlay'
     reply_path = golden / 'reply.md'
     events_path = golden / 'events.jsonl'
-    for path in (golden, overlay, reply_path, events_path):
+    needed = ((golden, reply_path, events_path) if case_id in EMPTY_OVERLAY_IDS
+              else (golden, overlay, reply_path, events_path))
+    for path in needed:
         if not path.exists():
             label = '' if path == golden else '/' + path.relative_to(golden).as_posix()
             errors.append('case %s: golden%s missing' % (case_id, label))

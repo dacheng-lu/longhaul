@@ -113,6 +113,14 @@ bwrap, and a platform without them fails closed instead of falling back to
 Deterministic tests only: a fake `hermes`, no network, no real profiles, and a key
 that never reaches the run directory.
 
+The first CI run of this release failed on a clean checkout and found two defects that the
+working tree had hidden. (1) The control cases have an empty `golden/overlay` directory, which
+git does not store; the validator treated its absence as a damaged suite, and now accepts it for those two
+control cases only (every other case still must have its overlay, which a test pins per case). (2) The workflow used the default shallow checkout, but the eval harness
+builds its pinned conditions with `git archive <sha>`; the checkout now fetches the full
+history. The suite had been run only in the working tree before; it is now also run in a fresh
+`git clone`.
+
 ## 1.1 — testable floor
 
 The gate now enforces what the prose promised. Seven rules that v1.0 documented and

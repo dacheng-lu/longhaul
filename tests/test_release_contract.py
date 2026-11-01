@@ -89,6 +89,14 @@ class TestCiMatrix:
         assert 'macos' not in entries.lower(), entries
         assert 'windows' not in entries.lower(), entries
 
+    def test_the_checkout_fetches_the_full_history(self):
+        """The eval harness builds its pinned conditions with `git archive <sha>` (v1 at b8b7d8c, v1.1 at
+        af52cd8), so a shallow checkout fails 12 tests with 'not a valid object name'. The first CI run
+        found this: it ran with the default depth of 1."""
+        text = CI.read_text()
+        step = text.split('actions/checkout@v4', 1)[1].split('- uses:', 1)[0].split('- name:', 1)[0]
+        assert 'fetch-depth: 0' in step, step
+
     def test_the_workflow_states_why(self):
         comments = [line.strip() for line in CI.read_text().splitlines()
                     if line.strip().startswith('#')]
