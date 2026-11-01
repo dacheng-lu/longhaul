@@ -16,6 +16,8 @@
 
 Skill version: **1.2** · [Core protocol / 核心流程 / Kernprotokoll](SKILL.md) · [Apache-2.0](LICENSE)
 
+[Roadmap / 升级路线图 / Entwicklungsplan](ROADMAP.md) — priorities, acceptance criteria and Harness Engineering positioning; proposed work, not shipped features.
+
 ## English
 
 Longhaul is a lightweight orchestration skill for long-running research, creation and implementation tasks. It helps an AI assistant preserve task state, select available tools, challenge consequential assumptions and verify deliverables before declaring completion.
