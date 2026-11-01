@@ -118,8 +118,11 @@ working tree had hidden. (1) The control cases have an empty `golden/overlay` di
 git does not store; the validator treated its absence as a damaged suite, and now accepts it for those two
 control cases only (every other case still must have its overlay, which a test pins per case). (2) The workflow used the default shallow checkout, but the eval harness
 builds its pinned conditions with `git archive <sha>`; the checkout now fetches the full
-history. The suite had been run only in the working tree before; it is now also run in a fresh
-`git clone`.
+history. (3) The suite needs pytest's temporary directory outside `/tmp`, which the sandbox masks;
+with no `TMPDIR` set, six sandbox tests failed on the runner. The workflow now sets
+`PYTEST_DEBUG_TEMPROOT` to `$RUNNER_TEMP`. The suite had been run only in the working tree, with
+`TMPDIR` set by the environment, before; it is now also run in a fresh `git clone` with no temp
+variables.
 
 ## 1.1 — testable floor
 

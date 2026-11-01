@@ -48,4 +48,9 @@ jobs:
           fi
           bwrap --ro-bind / / --unshare-net true
       - name: gate tests
+        env:
+          # The eval harness masks /tmp inside its sandbox and counts whatever it finds there as host
+          # contamination; pytest's default base (/tmp/pytest-of-<user>) is exactly that. $RUNNER_TEMP is
+          # emptied at the start of every job. Same remedy as pyinstaller's CI (PYTEST_DEBUG_TEMPROOT).
+          PYTEST_DEBUG_TEMPROOT: ${{ runner.temp }}
         run: python -m pytest tests -q

@@ -303,6 +303,13 @@ live path is blocked precisely because no credential boundary is solved.
   `/var/tmp/lheval-subject`, and one process can delete the decoy sibling that another
   has just planted (`test_live_probe_cannot_see_a_decoy_sibling` failed once in eight
   doubled runs). CI and the numbers above use one process.
+- The test suite needs pytest's temporary directory outside `/tmp` and `/var/tmp`. The sandbox
+  masks both, and the fake `hermes` entry of the tests lives under pytest's temporary
+  directory, so with the default base (`/tmp/pytest-of-<user>`, what you get when none of
+  `TMPDIR`, `TEMP`, `TMP` is set) six tests fail with `baseline: /tmp carries 1 host
+  entry/entries`. Set `TMPDIR` or pytest's `PYTEST_DEBUG_TEMPROOT` to a directory elsewhere;
+  CI sets the latter to `$RUNNER_TEMP`. One test (`test_launcher_chain_resolves_the_measured_roots`)
+  skips on a host without `hermes`, so a runner shows `1 skipped`.
 - `write_state` cleanup, two limits found by the final audit and left open in 1.2. (a) In the
   anchored case, when the unlink by leaf fails, the cleanup falls back to `os.unlink` by
   name at the path `mkstemp` returned, with no identity check; if the parent was swapped in

@@ -98,6 +98,18 @@ class TestCiMatrix:
         step = text.split('actions/checkout@v4', 1)[1].split('- uses:', 1)[0].split('- name:', 1)[0]
         assert 'fetch-depth: 0' in step, step
 
+    def test_the_gate_tests_keep_pytests_temp_dir_off_tmp(self):
+        """The eval harness masks /tmp (and /var/tmp) inside its sandbox and counts whatever it finds there
+        as host contamination, and the fake hermes entry of the tests lives under pytest's temporary
+        directory. pytest's default base is /tmp/pytest-of-<user>, so on a runner with no TMPDIR six tests
+        failed with 'baseline: /tmp carries 1 host entry/entries (pytest-of-runner)'. The remedy is pytest's
+        documented PYTEST_DEBUG_TEMPROOT, pointed at the runner's own temp directory (pyinstaller's CI does
+        the same). Matched per line so that a comment or another step cannot satisfy it."""
+        text = CI.read_text()
+        step = text.split('- name: gate tests', 1)[1]
+        assert re.search(r'^\s+PYTEST_DEBUG_TEMPROOT:\s*\$\{\{\s*runner\.temp\s*\}\}\s*$', step, re.M), step
+        assert re.search(r'^\s+run:\s*python -m pytest tests -q\s*$', step, re.M), step
+
     def test_the_workflow_states_why(self):
         comments = [line.strip() for line in CI.read_text().splitlines()
                     if line.strip().startswith('#')]
