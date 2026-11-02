@@ -265,6 +265,7 @@ The implementation documents are currently in English. 本节链接的实现文�
 | [references/state.md](references/state.md) | Checkpoint contract · 检查点约定 · Checkpoint-Spezifikation |
 | [references/capabilities.md](references/capabilities.md) | Tools and delegation · 工具与委派 · Werkzeuge und Delegation |
 | [references/grill.md](references/grill.md) | ABCD decision review · ABCD 决策审查 · ABCD-Entscheidungsprüfung |
+| [references/decision.md](references/decision.md) | Weighted decision matrix · 加权决策矩阵 · Gewichtete Entscheidungsmatrix |
 | [references/learning.md](references/learning.md) | SECI and lessons · SECI 与经验积累 · SECI und Lektionen |
 | [scripts/checkpoint.py](scripts/checkpoint.py) | State validator · 状态验证器 · Zustandsvalidator |
 | [scripts/secret_scan.py](scripts/secret_scan.py) | Credential detector · 凭证检测器 · Zugangsdaten-Erkennung |

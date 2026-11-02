@@ -1,5 +1,14 @@
 # Changelog
 
+## Unreleased
+
+- `references/decision.md` (proposal, not measured): for choices with conflicting
+  stakeholders, hard-to-reverse routes or three or more real options — an ambition check
+  (altitude, depth, range after Rieseberg), roles as executable checks instead of voices,
+  typed weights, a numeric matrix with divergence, a ±10-point sensitivity check, ABCD
+  output and an outside judge recorded as checkpoint evidence. SKILL.md gains one
+  pointer sentence in the ABCD section; no eval scenario covers it yet.
+
 ## 1.2 — 2026-11-01
 
 The protocol now has a measurement layer under `evals/`. The same ten scenarios run

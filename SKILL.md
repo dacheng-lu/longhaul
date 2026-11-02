@@ -44,7 +44,7 @@ Use supported subagents for separable research, implementation or independent re
 
 ## Grill with ABCD + recommendation
 
-For consequential user-owned choices, present four genuinely distinct options A–D with tradeoffs, mark one recommended choice and explain why. Permit free-form responses. Use fewer options if four are artificial or the host cannot support them. Never use a clarification widget for approval. Read [grill.md](references/grill.md) for triggers and UI adaptation.
+For consequential user-owned choices, present four genuinely distinct options A–D with tradeoffs, mark one recommended choice and explain why. Permit free-form responses. Use fewer options if four are artificial or the host cannot support them. Never use a clarification widget for approval. Read [grill.md](references/grill.md) for triggers and UI adaptation. When stakeholders conflict, the route is hard to reverse or three or more real options exist, read [decision.md](references/decision.md) first: roles as methods, weighted matrix, sensitivity, outside judge.
 
 Resolve researchable facts with tools, not preference votes. Do not re-ask settled questions. Continue independent work while awaiting answers. For optional unanswered choices, state a reversible default; missing answers never authorize consequential external actions.
 
