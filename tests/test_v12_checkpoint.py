@@ -264,6 +264,36 @@ class TestSecrets:
     def test_harmless_metadata_is_not_reported(self, entry):
         assert secret_scan.scan_state(entry) == []
 
+    def test_credential_named_in_a_sibling_field_is_reported(self, tmp_path):
+        """A wrapper that names the credential next to its value, as n8n stores headers.
+
+        Measured on real n8n workflow exports: ``{"name": "Secret", "value": "..."}``
+        is invisible to a rule that only looks at the key (``value``) and to the value
+        shapes (the secret has no prefix), so it was reported as zero hits.
+        """
+        state, _ = single_deliverable(tmp_path)
+        state['capabilities'] = [{'name': 'Autotask REST', 'class': 'discovered',
+                                  'purpose': 'ticket creation',
+                                  'headers': [{'name': 'Secret', 'value': 'opaquevalue123'},
+                                              {'name': 'Content-Type', 'value': 'application/json'}]}]
+        assert secret_scan.scan_state(state) == [
+            ('$.capabilities[0].headers[0].value', 'credential_key')]
+        code, out = gate(tmp_path, state)
+        assert code == 1, out
+        assert any('$.capabilities[0].headers[0].value' in e for e in out['errors']), out['errors']
+        assert 'opaquevalue123' not in json.dumps(out), 'the gate echoed the secret'
+
+    @pytest.mark.parametrize('name', ['Content-Type', 'Accept', 'X-Request-Id', 'Purpose'])
+    def test_a_harmless_sibling_name_does_not_mark_the_value(self, name):
+        assert secret_scan.scan_state({'headers': [{'name': name, 'value': 'application/json'}]}) == []
+
+    def test_a_pointer_in_a_credential_named_sibling_stays_silent(self):
+        """The pointer exemption applies to the sibling rule too."""
+        assert secret_scan.scan_state(
+            {'headers': [{'name': 'Secret', 'value': '${AT_SECRET}'}]}) == []
+        assert secret_scan.scan_state(
+            {'headers': [{'name': 'Authorization', 'value': '«redacted»'}]}) == []
+
     def test_credential_in_a_value_position_is_reported(self, tmp_path):
         """Control: the same password is caught when it sits in a value."""
         state, _ = single_deliverable(tmp_path)

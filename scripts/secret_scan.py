@@ -41,8 +41,14 @@ LABEL_KEYS = frozenset({'sha256', 'revision', 'digest', 'head', 'commit',
 CREDENTIAL_KEYS = frozenset({
     'apikey', 'secretkey', 'clientsecret', 'accesstoken', 'authtoken',
     'refreshtoken', 'bearertoken', 'password', 'passwd', 'pwd', 'privatekey',
-    'token',
+    'token', 'authorization', 'apiintegrationcode', 'secret',
 })
+
+# Fields that carry the value of a wrapper which names the credential in a
+# sibling ``name`` field, as n8n stores HTTP header credentials:
+# ``{"name": "Secret", "value": "..."}``. The value is the secret even though its
+# own key is only ``value``.
+VALUE_KEYS = frozenset({'value', 'valuestring', 'valuetext'})
 
 # Values that point at a credential instead of being one. Only syntax that is
 # verifiably a pointer is exempt; a phrase such as "see the vault entry" is not.
@@ -97,6 +103,12 @@ def _credential_key(key):
     return re.sub(r'[^a-z0-9]', '', key.strip().lower()) in CREDENTIAL_KEYS
 
 
+def _value_key(key):
+    if not isinstance(key, str):
+        return False
+    return re.sub(r'[^a-z0-9]', '', key.strip().lower()) in VALUE_KEYS
+
+
 def scan_text(text, key=None, label=False):
     """Return the kinds of secret shapes found in one string (never the value).
 
@@ -137,8 +149,14 @@ def scan_text(text, key=None, label=False):
 def walk(node, path='$', key=None, label=False):
     """Yield (path, key, value, label) for every string value in the document."""
     if isinstance(node, dict):
+        # A wrapper that names the credential next to its value, as n8n stores HTTP
+        # header credentials ({"name": "Secret", "value": "..."}): the value is the
+        # secret even though its own key is only "value".
+        named = node.get('name')
+        named = named if isinstance(named, str) and _credential_key(named) else None
         for k, v in node.items():
-            yield from walk(v, f'{path}.{k}', k, label or k in LABEL_KEYS)
+            field = named if named and _value_key(k) else k
+            yield from walk(v, f'{path}.{k}', field, label or k in LABEL_KEYS)
     elif isinstance(node, list):
         for i, v in enumerate(node):
             yield from walk(v, f'{path}[{i}]', key, label)

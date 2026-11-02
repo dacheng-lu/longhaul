@@ -1,5 +1,16 @@
 # Changelog
 
+## Unreleased
+
+- secret scan: a value stored next to a sibling `name` that is itself a credential key
+  is now reported. That is how n8n stores HTTP header and OAuth body credentials
+  (`{"name": "Secret", "value": "..."}`), and the value's own key is only `value`.
+  Measured on real n8n workflow exports: the Autotask header pair produced zero hits
+  before and two after; a 37 kB workflow went from 2 to 12 reported hits, all of them
+  real (`client_secret`, `password`, `access_token`, `Authorization`). `authorization`,
+  `secret` and `apiintegrationcode` join the credential key names, and the pointer
+  exemption (`${VAR}`, `«redacted»`) still applies.
+
 ## 1.2 — 2026-11-01
 
 The protocol now has a measurement layer under `evals/`. The same ten scenarios run
