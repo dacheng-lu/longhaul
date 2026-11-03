@@ -10,6 +10,12 @@
   real (`client_secret`, `password`, `access_token`, `Authorization`). `authorization`,
   `secret` and `apiintegrationcode` join the credential key names, and the pointer
   exemption (`${VAR}`, `«redacted»`) still applies.
+- release contract: the checkout check reads the `fetch-depth` line itself instead of
+  matching the string anywhere in the step, so a commented-out `# fetch-depth: 0` no longer
+  satisfies it; and the two pinned-commit tests in `test_eval_runner.py` fail instead of
+  skipping when `CI` is set, so a shallow checkout cannot pass silently. Both were open
+  findings of the v1.2 CI audit (`ROADMAP.md`, "Known open findings"); each now has a test
+  that names the old behaviour.
 - **`report`, the stop state** (`report-states.md`, D1): why a task stopped, in a word a
   machine can sort — `progress | waiting | ready | blocked | failed | dropped` — with the
   derived `person/*` stages. `blockers` keeps the prose a human reads. Optional, so a 1.2
