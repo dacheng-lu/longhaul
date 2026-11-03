@@ -77,6 +77,19 @@ its inode is confirmed through the verified directory's descriptor. That is the
 documented NO-LOCK limitation: there is no serialization against a writer that
 acts after that second check, and no cross-process lock or CAS protocol --
 nothing here promises otherwise.
+
+Two optional additions carry a stop and a grant, both outside the v2 schema so
+every existing record keeps validating unchanged::
+
+    report      why the unit stopped, in a word a machine can sort
+                (progress | waiting | ready | blocked | failed | dropped)
+    <stem>.mandate.json   the immutable authorisation: who asked, on which
+                channel, under which policy version, with which scope
+
+A mandate lives in its own file because it never changes while the record is
+rewritten on every step; a wider scope is a new mandate under a new id, and
+``revalidate`` answers whether the one on record still covers the work. Neither
+addition is ever inferred from prose, and neither can be relaxed by prompt text.
 """
 import argparse
 import errno
@@ -100,6 +113,10 @@ CRITERION = ('pending', 'verified', 'failed', 'unobservable')
 RESULTS = ('pass', 'fail', 'unknown')
 KINDS = ('local', 'external')
 CLASSES = ('callable', 'installed_unavailable', 'discovered', 'unavailable')
+REPORT_STATES = ('progress', 'waiting', 'ready', 'blocked', 'failed', 'dropped')
+REPORT_NEEDS_PERSON = ('ready', 'blocked', 'failed')
+MANDATE_STRENGTHS = ('explicit', 'inferred')
+MANDATE_REQUIRED = ('id', 'source', 'actor', 'channel', 'policy_version', 'scope')
 LISTS = ('constraints', 'milestones', 'acceptance', 'artifacts', 'evidence',
          'blockers', 'attempts', 'decisions', 'capabilities', 'lessons',
          'shortcuts', 'waivers')
@@ -977,11 +994,87 @@ def check_blockers(state, errors, gate):
         errors.append('status is blocked')
 
 
+def check_report(state, errors):
+    """The optional ``report`` block: why the unit stopped, in a word a machine can sort.
+
+    ``blockers`` holds prose a human reads; ``report.state`` is what a tick, a panel or a
+    reviewer can count. The block is optional so every v1.2 record still validates, and a
+    failure may not be filed as complete. ``dropped`` is exempt from that rule on purpose:
+    it ends work that needed no action, which can be a completed end.
+    """
+    report = state.get('report')
+    if report is None:
+        return
+    if not isinstance(report, dict):
+        errors.append('report must be an object with state, since and reason')
+        return
+    if report.get('state') not in REPORT_STATES:
+        errors.append('report.state must be one of %s; a sentence is not a state'
+                      % ', '.join(REPORT_STATES))
+    if not nonempty(report.get('reason')):
+        errors.append('report.reason must be nonempty: say why it stopped')
+    elif len(str(report['reason'])) > 300:
+        errors.append('report.reason must be at most 300 characters')
+    if 'since' in report:
+        parse_ts(report.get('since'), 'report.since', errors)
+    if 'next' in report and not nonempty(report.get('next')):
+        errors.append('report.next must be nonempty when present')
+    if state.get('status') == 'complete' and report.get('state') in ('blocked', 'failed'):
+        errors.append('status is complete but report.state is %r: work that stopped on a block '
+                      'or a failure is not complete' % report.get('state'))
+
+
+def mandate_path(state_path):
+    """The mandate sits next to the record, under the record's own stem.
+
+    A separate file because a mandate is immutable and the record is rewritten on every
+    step: a new mandate is a new file, and nothing in the state schema moves.
+    """
+    p = Path(os.path.normpath(_absolute(str(state_path))))
+    return p.with_name(p.stem + '.mandate.json')
+
+
+def mandate_errors(doc):
+    errors = []
+    if not isinstance(doc, dict):
+        return ['mandate must be an object']
+    if doc.get('schema_version') != 1:
+        errors.append('mandate.schema_version must be 1')
+    for key in MANDATE_REQUIRED:
+        if not nonempty(doc.get(key)):
+            errors.append('mandate.%s must be nonempty' % key)
+    if doc.get('strength') not in MANDATE_STRENGTHS:
+        errors.append('mandate.strength must be explicit or inferred')
+    if 'granted_at' in doc:
+        parse_ts(doc.get('granted_at'), 'mandate.granted_at', errors)
+    rules = doc.get('rules', [])
+    if not isinstance(rules, list) or any(not nonempty(r) for r in rules):
+        errors.append('mandate.rules must be a list of non-empty strings')
+    for path, kind in secret_scan.scan_state(doc):
+        errors.append('mandate: secret-shaped value (%s) at %s; name who and what, never a '
+                      'credential' % (kind, secret_scan.redact_path(path)))
+    return errors
+
+
+def check_mandate(state_path, errors):
+    """A mandate file is optional; when it exists it must be readable and complete."""
+    path = mandate_path(state_path)
+    if not os.path.lexists(str(path)):
+        return
+    try:
+        _raw, doc = load_document(str(path))
+    except RecordError as exc:
+        errors.extend(exc.errors)
+        return
+    errors.extend(mandate_errors(doc))
+
+
 def inspect(state, base, gate=False):
     errors, warnings = [], []
     if not check_top(state, errors):
         return errors, warnings
     check_secrets(state, errors)
+    check_report(state, errors)
     check_next_action(state, errors, warnings)
     check_artifacts(state, base, errors, gate)
     check_evidence(state, base, errors, gate)
@@ -1432,6 +1525,82 @@ def cmd_evidence(args):
     return 0
 
 
+def write_mandate(path, doc):
+    """Create the mandate file exclusively: O_EXCL refuses an existing file and a symlink alike."""
+    raw = _absolute(str(path))
+    try:
+        fd = os.open(raw, os.O_WRONLY | os.O_CREAT | os.O_EXCL | _NOFOLLOW | _CLOEXEC, 0o644)
+    except FileExistsError:
+        raise RecordError(['%s already exists: a mandate is immutable, write a new one under a '
+                           'new id (a wider scope is a new mandate)' % raw])
+    except OSError as exc:
+        raise RecordError(['%s: cannot be created (%s)' % (raw, exc.strerror or exc)])
+    try:
+        os.write(fd, (json.dumps(doc, indent=1, allow_nan=False) + '\n').encode('utf-8'))
+        os.fsync(fd)
+    finally:
+        os.close(fd)
+
+
+def cmd_report(args):
+    data, state = load_document(args.path)
+    require_schema_v2(require_object(state), 'report')
+    ensure_structure(state, 'report')
+    report = {'state': args.state, 'since': args.since or iso(now()), 'reason': args.reason}
+    if args.next:
+        report['next'] = args.next
+    previous = state.get('report')
+    state['report'] = report
+    errors = []
+    check_report(state, errors)
+    if errors:
+        raise RecordError(errors)
+    write_state(args.path, state, data)
+    emit({'report': report, 'previous': previous})
+    return 0
+
+
+def cmd_mandate(args):
+    doc = {'schema_version': 1, 'id': args.id, 'source': args.source, 'actor': args.actor,
+           'channel': args.channel, 'strength': args.strength,
+           'policy_version': args.policy_version, 'scope': args.scope,
+           'granted_at': args.granted_at or iso(now())}
+    if args.rule:
+        doc['rules'] = list(args.rule)
+    errors = mandate_errors(doc)
+    if errors:
+        raise RecordError(errors)
+    path = mandate_path(args.path)
+    write_mandate(path, doc)
+    emit({'ok': True, 'mandate': doc, 'written': str(path)})
+    return 0
+
+
+def cmd_revalidate(args):
+    """Does the mandate on record still cover the work? 0 yes, 1 no, 2 there is none."""
+    _data, state = load_document(args.path)
+    require_schema_v2(require_object(state), 'revalidate')
+    path = mandate_path(args.path)
+    if not os.path.lexists(str(path)):
+        emit({'ok': True, 'holds': False, 'reason': 'no mandate on record', 'mandate': str(path)})
+        return 2
+    _raw, doc = load_document(str(path))
+    errors = mandate_errors(doc)
+    if errors:
+        emit({'ok': False, 'holds': False, 'errors': errors})
+        return 1
+    reasons = []
+    if args.policy_version and doc['policy_version'] != args.policy_version:
+        reasons.append('granted under policy %r, the current policy is %r'
+                       % (doc['policy_version'], args.policy_version))
+    if args.actor and doc['actor'] != args.actor:
+        reasons.append('granted for actor %r, the work is now asked for by %r'
+                       % (doc['actor'], args.actor))
+    emit({'ok': True, 'holds': not reasons, 'mandate': doc['id'],
+          'policy_version': doc['policy_version'], 'reasons': reasons})
+    return 0 if not reasons else 1
+
+
 def state_base(path):
     """The record's directory as a lexical path: the walk verified it, no resolve()."""
     return Path(os.path.dirname(os.path.normpath(_absolute(path))))
@@ -1480,6 +1649,7 @@ def cmd_check(args, gate):
                   'scope': SCOPE})
             return 1
     errors, more = inspect(raw, base, gate)
+    check_mandate(args.path, errors)
     emit({'ok': not errors, 'errors': errors, 'warnings': warnings + more, 'scope': SCOPE})
     return 1 if errors else 0
 
@@ -1546,6 +1716,34 @@ def main():
     p.add_argument('path')
     p.add_argument('--write', action='store_true')
     p.set_defaults(func=cmd_migrate)
+
+    p = sub.add_parser('report', help='record why the unit stopped, in a sortable state')
+    p.add_argument('path')
+    p.add_argument('--state', choices=REPORT_STATES, required=True)
+    p.add_argument('--reason', required=True)
+    p.add_argument('--since')
+    p.add_argument('--next')
+    p.set_defaults(func=cmd_report)
+
+    p = sub.add_parser('mandate', help='write the immutable authorisation next to the record '
+                                       '(refuses overwrite)')
+    p.add_argument('path')
+    p.add_argument('--id', required=True)
+    p.add_argument('--source', required=True)
+    p.add_argument('--actor', required=True)
+    p.add_argument('--channel', required=True)
+    p.add_argument('--strength', choices=MANDATE_STRENGTHS, required=True)
+    p.add_argument('--policy-version', required=True)
+    p.add_argument('--scope', required=True)
+    p.add_argument('--rule', action='append')
+    p.add_argument('--granted-at')
+    p.set_defaults(func=cmd_mandate)
+
+    p = sub.add_parser('revalidate', help='does the mandate still hold? 0 yes, 1 no, 2 no mandate')
+    p.add_argument('path')
+    p.add_argument('--policy-version')
+    p.add_argument('--actor')
+    p.set_defaults(func=cmd_revalidate)
 
     args = parser.parse_args()
     try:
