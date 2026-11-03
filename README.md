@@ -14,7 +14,7 @@
 
 [English](#english) · [简体中文](#zh-cn) · [Deutsch](#deutsch)
 
-[Joint recovery demo / 联合恢复演示 / Gemeinsames Wiederaufnahme-Beispiel](docs/makeextreme-handoff.md) · [Goal / 项目目标 / Ziel](GOAL.md) · [First checkpoint example / 检查点入门 / Checkpoint-Beispiel](docs/first-checkpoint.md)
+[Three-project guide / 三项目指南 / Leitfaden für drei Projekte](https://github.com/dacheng-lu/flowlore/blob/main/AGENT-GUIDE.md) · [Joint recovery demo / 联合恢复演示 / Gemeinsames Wiederaufnahme-Beispiel](docs/makeextreme-handoff.md) · [Goal / 项目目标 / Ziel](GOAL.md) · [First checkpoint example / 检查点入门 / Checkpoint-Beispiel](docs/first-checkpoint.md)
 
 Skill version: **1.2** · [Core protocol / 核心流程 / Kernprotokoll](SKILL.md) · [Apache-2.0](LICENSE)
 
@@ -22,7 +22,7 @@ Skill version: **1.2** · [Core protocol / 核心流程 / Kernprotokoll](SKILL.m
 
 ## English
 
-**Choosing a tool:** Use Longhaul for exploratory work, decisions and evidence across sessions. Use [Makeextreme](https://github.com/dacheng-lu/makeextreme) for known-stage pipelines with runnable checks. Each works independently; a shared adapter is not implemented. [Try the checkpoint example](docs/first-checkpoint.md).
+**Choosing a tool:** Use Longhaul for exploratory work, decisions and evidence across sessions. Use [Makeextreme](https://github.com/dacheng-lu/makeextreme) for known-stage pipelines with runnable checks. [FlowLore](https://github.com/dacheng-lu/flowlore) catalogs sources and recipes. All three work independently; a shared adapter is not implemented. [Try the checkpoint example](docs/first-checkpoint.md).
 
 Longhaul is a lightweight orchestration skill for long-running research, creation and implementation tasks. It helps an AI assistant preserve task state, select available tools, challenge consequential assumptions and verify deliverables before declaring completion.
 
@@ -104,7 +104,7 @@ Useful contributions include reproducible recovery scenarios, clearer host setup
 
 ## 简体中文
 
-**如何选择：** 探索性任务、跨会话决策与证据管理使用 Longhaul；阶段已知、可用命令检查的流水线可使用 [Makeextreme](https://github.com/dacheng-lu/makeextreme)。两者可以独立使用；共享适配器尚未实现。[体验检查点示例](docs/first-checkpoint.md)。
+**如何选择：** 探索性任务、跨会话决策与证据管理使用 Longhaul；阶段已知、可用命令检查的流水线可使用 [Makeextreme](https://github.com/dacheng-lu/makeextreme)。[FlowLore](https://github.com/dacheng-lu/flowlore) 整理来源与配方。三者可以独立使用；共享适配器尚未实现。[体验检查点示例](docs/first-checkpoint.md)。
 
 远航是面向长期研究、创作与实现任务的轻量编排 Skill，帮助 AI 保存任务状态、选择可用工具、审查关键假设，并在宣称完成之前验证交付物。
 
@@ -184,7 +184,7 @@ python3 scripts/checkpoint.py gate ../longhaul-state/task.json
 
 ## Deutsch
 
-**Werkzeugwahl:** Longhaul unterstützt offene Aufgaben, Entscheidungen und Belege über Sitzungen hinweg; [Makeextreme](https://github.com/dacheng-lu/makeextreme) führt Pipelines mit bekannten Stufen und prüfbaren Ergebnissen aus. Beide funktionieren unabhängig; ein gemeinsamer Adapter ist nicht implementiert. [Checkpoint-Beispiel](docs/first-checkpoint.md).
+**Werkzeugwahl:** Longhaul unterstützt offene Aufgaben, Entscheidungen und Belege über Sitzungen hinweg; [Makeextreme](https://github.com/dacheng-lu/makeextreme) führt Pipelines mit bekannten Stufen und prüfbaren Ergebnissen aus. [FlowLore](https://github.com/dacheng-lu/flowlore) sammelt Quellen und Rezepte. Alle drei funktionieren unabhängig; ein gemeinsamer Adapter ist nicht implementiert. [Checkpoint-Beispiel](docs/first-checkpoint.md).
 
 Longhaul ist ein schlanker Orchestrierungs-Skill für länger dauernde Recherche-, Gestaltungs- und Implementierungsaufgaben. Er hilft einem KI-Assistenten, den Aufgabenstand zu sichern, verfügbare Werkzeuge auszuwählen, wichtige Annahmen zu hinterfragen und Ergebnisse vor dem Abschluss zu prüfen.
 
