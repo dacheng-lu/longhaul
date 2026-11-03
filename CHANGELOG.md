@@ -2,6 +2,18 @@
 
 ## Unreleased
 
+- **`report`, the stop state** (`report-states.md`, D1): why a task stopped, in a word a
+  machine can sort — `progress | waiting | ready | blocked | failed | dropped` — with the
+  derived `person/*` stages. `blockers` keeps the prose a human reads. Optional, so a 1.2
+  record validates unchanged; the gate refuses a sentence where the state belongs, an empty
+  reason, and `status: complete` standing over `blocked` or `failed` (`dropped` is exempt:
+  work that needed no action can be a completed end).
+- **`mandate`, the authorisation as its own file** (`mandate.md`, D1): `<record-stem>.mandate.json`
+  records who asked, on which channel, under which policy version, with which scope and
+  strength. A separate file because a mandate never changes while the record is rewritten on
+  every step; `mandate` refuses to overwrite (a wider scope is a new mandate), the gate
+  refuses an incomplete one, and `revalidate` answers 0 holds / 1 does not (with reasons) /
+  2 none on record. No credentials, and prose never counts as a mandate.
 - `references/decision.md` (proposal, not measured): for choices with conflicting
   stakeholders, hard-to-reverse routes or three or more real options — an ambition check
   (altitude, depth, range after Rieseberg), roles as executable checks instead of voices,
