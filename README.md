@@ -14,6 +14,11 @@
 
 [English](#english) · [简体中文](#zh-cn) · [Deutsch](#deutsch)
 
+[Website](https://www.dev-lu.com/) · [Documentation](docs/first-checkpoint.md) · [License](LICENSE)
+
+**Three independent projects:** [FlowLore](https://github.com/dacheng-lu/flowlore) · [Longhaul](https://github.com/dacheng-lu/longhaul) · [Makeextreme](https://github.com/dacheng-lu/makeextreme)  
+**No shared adapter or automatic handoff is built in.**
+
 [Value validation / 价值验证 / Nutzen prüfen](references/value-validation.md)
 
 [Three-project guide / 三项目指南 / Leitfaden für drei Projekte](https://github.com/dacheng-lu/flowlore/blob/main/AGENT-GUIDE.md) · [Joint recovery demo / 联合恢复演示 / Gemeinsames Wiederaufnahme-Beispiel](docs/makeextreme-handoff.md) · [Goal / 项目目标 / Ziel](GOAL.md) · [First checkpoint example / 检查点入门 / Checkpoint-Beispiel](docs/first-checkpoint.md)
@@ -29,6 +34,19 @@ Skill version: **1.2** · [Core protocol / 核心流程 / Kernprotokoll](SKILL.m
 Longhaul is a lightweight orchestration skill for long-running research, creation and implementation tasks. It helps an AI assistant preserve task state, select available tools, challenge consequential assumptions and verify deliverables before declaring completion.
 
 It combines **durable checkpoints + MCP/tool discovery + selective model/subagent delegation + ABCD decisions + SECI-inspired learning**. Specialist skills remain responsible for domain-specific work and quality checks.
+
+### The task lifecycle
+
+```mermaid
+flowchart TD
+    A["Set goal"] --> B["Work and checkpoint"]
+    B --> C{"Decision or recovery?"}
+    C -->|"Continue"| D["Reconcile and adjust"]
+    D --> B
+    C -->|"Deliver"| E["Verify artifacts and evidence"]
+```
+
+Checkpoints require persistent storage supplied by the host. Longhaul is not a background service. [Try a checkpoint](docs/first-checkpoint.md).
 
 ### When to use it
 
@@ -112,6 +130,19 @@ Useful contributions include reproducible recovery scenarios, clearer host setup
 
 它结合了 **持久化检查点 + MCP／工具发现 + 按需模型／子代理委派 + ABCD 决策 + SECI 式经验积累**。具体领域的执行与质量检查仍由相应专业 Skill 负责。
 
+### 任务如何推进
+
+```mermaid
+flowchart TD
+    A["明确目标"] --> B["执行并保存检查点"]
+    B --> C{"决策或恢复？"}
+    C -->|"继续"| D["核对状态并调整"]
+    D --> B
+    C -->|"交付"| E["验证产物与证据"]
+```
+
+检查点依赖宿主提供持久存储；Longhaul 不是后台服务。[体验检查点](docs/first-checkpoint.md)。
+
 ### 适用场景
 
 - 任务跨越多个阶段、文件、来源或会话。
@@ -191,6 +222,19 @@ python3 scripts/checkpoint.py gate ../longhaul-state/task.json
 Longhaul ist ein schlanker Orchestrierungs-Skill für länger dauernde Recherche-, Gestaltungs- und Implementierungsaufgaben. Er hilft einem KI-Assistenten, den Aufgabenstand zu sichern, verfügbare Werkzeuge auszuwählen, wichtige Annahmen zu hinterfragen und Ergebnisse vor dem Abschluss zu prüfen.
 
 Er verbindet **dauerhafte Checkpoints + MCP- und Werkzeugerkennung + gezielten Einsatz von Modellen und Subagenten + ABCD-Entscheidungen + SECI-inspirierte Wissensentwicklung**. Fachspezifische Skills übernehmen weiterhin die eigentliche Facharbeit und deren Qualitätsprüfung.
+
+### Ablauf einer Aufgabe
+
+```mermaid
+flowchart TD
+    A["Ziel festlegen"] --> B["Arbeiten und Checkpoint speichern"]
+    B --> C{"Entscheidung oder Wiederaufnahme?"}
+    C -->|"Fortsetzen"| D["Stand abgleichen und anpassen"]
+    D --> B
+    C -->|"Abgeben"| E["Artefakte und Belege prüfen"]
+```
+
+Checkpoints benötigen dauerhaften Speicher des Hosts. Longhaul ist kein Hintergrunddienst. [Checkpoint ausprobieren](docs/first-checkpoint.md).
 
 ### Wann ist Longhaul sinnvoll?
 
@@ -293,3 +337,4 @@ Entwurfsquellen, keine mitgelieferten Abhängigkeiten oder behaupteten Partnersc
 - [Nonaka, Toyama & Konno (2000)](https://doi.org/10.1016/S0024-6301(99)00115-6): SECI theory; its application here is a design proposal / SECI 理论，此处的 AI 应用属于设计提案 / SECI-Theorie; die Anwendung auf KI ist hier ein Entwurfsvorschlag.
 
 License / 许可证 / Lizenz: [Apache License 2.0](LICENSE).
+
