@@ -120,6 +120,7 @@ Useful contributions include reproducible recovery scenarios, clearer host setup
 
 [Files and design references](#files-and-design-references) · [Back to top](#远航--longhaul)
 
+<a id="zh-cn"></a>
 <a name="zh-cn"></a>
 
 ## 简体中文
