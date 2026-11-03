@@ -14,6 +14,8 @@
 
 [English](#english) · [简体中文](#zh-cn) · [Deutsch](#deutsch)
 
+[Value validation / 价值验证 / Nutzen prüfen](references/value-validation.md)
+
 [Three-project guide / 三项目指南 / Leitfaden für drei Projekte](https://github.com/dacheng-lu/flowlore/blob/main/AGENT-GUIDE.md) · [Joint recovery demo / 联合恢复演示 / Gemeinsames Wiederaufnahme-Beispiel](docs/makeextreme-handoff.md) · [Goal / 项目目标 / Ziel](GOAL.md) · [First checkpoint example / 检查点入门 / Checkpoint-Beispiel](docs/first-checkpoint.md)
 
 Skill version: **1.2** · [Core protocol / 核心流程 / Kernprotokoll](SKILL.md) · [Apache-2.0](LICENSE)

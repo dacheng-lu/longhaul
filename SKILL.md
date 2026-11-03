@@ -17,6 +17,8 @@ Support sustained progress, recoverable work and honest delivery. Treat this ski
 4. Discover relevant skills, callable MCPs/tools and supported delegation/model capabilities. Read [capabilities.md](references/capabilities.md) when selecting integrations or delegating. Resolve available capabilities before researching replacements.
 5. Choose one concrete next action and a small milestone. Continue authorized work autonomously. Ask only questions that materially affect the outcome; consult [grill.md](references/grill.md).
 
+For a consequential investment or product decision, optionally use [value-validation.md](references/value-validation.md) to test the weakest value assumption before expanding work. Apply the purpose-specific criteria; do not require monetization for noncommercial tasks.
+
 ## Keep durable task state
 
 Maintain one authoritative record per task: goal, constraints, milestones, artifact revision, acceptance criteria, evidence, blockers, attempts, decisions, capabilities and next action. Keep reusable lessons separate from progress. Record observable facts and concise rationales, not private reasoning traces or credentials.

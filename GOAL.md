@@ -47,3 +47,7 @@ into privileged instructions or infer model-weight updates from stored lessons.
 Stop a milestone when its cases pass and remaining gaps are documented; do not
 add capabilities merely to increase scope. Human approval and host permissions
 remain authoritative for consequential actions.
+
+## Value evidence
+
+For a consequential investment decision, make value validation optional and purpose-specific. Record the hypothesis, budget and decision thresholds before the experiment; keep a completed experiment separate from a supported hypothesis. Test with an external user before claiming adoption. Noncommercial goals do not require revenue.
