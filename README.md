@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="assets/logo-readme.svg" alt="Longhaul · 远航 logo" width="640">
+  <img src="assets/logo-readme.png" alt="Longhaul · 远航 logo" width="640">
 </p>
 
 # 远航 · Longhaul
