@@ -122,6 +122,18 @@ Acceptance: a supported adapter detects stale evidence at completion and can res
 
 Acceptance: a lesson can be rejected by evidence, and any claimed improvement is supported outside its original example.
 
+## Proposal — v2.0 trust substrate (not decided) / 提议（未决定）
+
+Design only, not scheduled, and deliberately conditional: the v1.3 live-benefit measurement
+is not finished, so nothing here is built beyond what that measurement justifies. If v1.3
+shows no benefit over the current workflow, this direction is withdrawn.
+
+提议，未决定，不排期。仅设计；v1.3 的真实收益测量尚未完成，因此在该测量证明有必要之前不实现。
+若 v1.3 显示没有收益，则撤回此方向。
+
+- [docs/proposals/trust-substrate-2.0.md](docs/proposals/trust-substrate-2.0.md): immutable Mandates, a phase decision table, stateless replayable verdicts, independent verification (a producer cannot certify itself), a gate run by the host on Makeextreme's evidence, and cluster evaluation cases (racing workers, forged completion, stale peer writes, injected instructions, revoked Mandate). The shared exchange format with Makeextreme and FlowLore is drafted as `trio-trust/0` and is not frozen until one real release-digest run passes.
+- Acceptance cases are listed in the proposal with negative controls. Attention cost (interruptions per delivered task) is reported, never optimised by hiding a problem.
+
 ## Recommended next milestone / 推荐下一步
 
 Complete contract consistency, then freeze a small evaluation set and establish a safe live pilot. Prioritize measured recovery and verification benefits before adding more orchestration features.
