@@ -35,7 +35,7 @@ import re
 # Keys whose values are content hashes, revision labels or locators by design.
 LABEL_KEYS = frozenset({'sha256', 'revision', 'digest', 'head', 'commit',
                         'git_head', 'artifact_revisions', 'locator',
-                        'source_revision'})
+                        'source_revision', 'input_sha256'})
 
 # Keys that name a credential, stored with case and separators collapsed.
 CREDENTIAL_KEYS = frozenset({

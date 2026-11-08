@@ -100,6 +100,8 @@ python3 scripts/checkpoint.py evidence ../longhaul-state/task.json --id E1 --art
 python3 scripts/checkpoint.py gate ../longhaul-state/task.json
 ```
 
+Add `--run-case ID --run-model NAME --run-input SHA256` to an evidence command to bind the observation to the run that produced it. If a criterion carries the same three-field `run` object, `gate` refuses evidence from a different run even when the bytes and revision are identical; the binding is bookkeeping, not authentication.
+
 `revision` is the first 12 hex of the file's sha256, so nobody bumps a label by hand: register the file again and every piece of evidence bound to the old revision is reported stale, which re-verifies only the criteria that depend on it. `init` refuses to overwrite. A fresh template passes `validate` and **fails `gate`** until criteria are verified. `gate` also rejects a credential-shaped value in the state, an unchanged retry, a third attempt without a hypothesis change, a bundled next action, a future timestamp, an artifact no evidence binds, and a shortcut without an upgrade trigger. It checks bookkeeping and local hashes — **not** semantic correctness or remote results. `migrate` upgrades a v1 record and re-binds evidence only while the content hash still matches. See the [checkpoint contract](references/state.md).
 
 Keep task state outside the installed skill directory and persist it through the host’s durable storage workflow. A temporary local path alone is not a recovery guarantee.
@@ -196,6 +198,8 @@ python3 scripts/checkpoint.py evidence ../longhaul-state/task.json --id E1 --art
 python3 scripts/checkpoint.py gate ../longhaul-state/task.json
 ```
 
+在 evidence 命令后加上 `--run-case ID --run-model NAME --run-input SHA256`，即可把观测绑定到产生它的那次运行。若验收条件带有同样的三字段 `run` 对象，则即使字节与修订完全相同，`gate` 也会拒绝来自其他运行的证据；该绑定只是记账，不是身份认证。
+
 `revision` 是文件 sha256 的前 12 位，因此不需要手工递增版本号：再次登记同一文件就会产生新版本，绑定旧版本的证据被标记为过期，只有依赖它的验收条件需要重新核验。`init` 拒绝覆盖已有文件；新模板可以通过 `validate`，但在验收条件通过前**必然无法通过 `gate`**。`gate` 还会拒绝：状态中的凭证形态数值、原样重试、同一阻塞第三次仍未更换假设、打包多步的下一步动作、未来时间戳、没有任何证据绑定的产物，以及没有升级触发的捷径记录。它只检查记账与本地哈希，**不**判断内容是否正确，也不核验远程结果。`migrate` 把 v1 记录升级为 v2，并且只在内容哈希仍然一致时重新绑定证据。详见[检查点约定](references/state.md)。
 
 将任务状态保存在已安装 Skill 目录之外，并通过宿主的持久存储流程保存。仅有一个临时本地路径，不能保证任务可恢复。
@@ -289,6 +293,8 @@ python3 scripts/checkpoint.py evidence ../longhaul-state/task.json --id E1 --art
 # Abnahmekriterien eintragen, die E1 referenzieren, dann die Abschlussprüfung starten.
 python3 scripts/checkpoint.py gate ../longhaul-state/task.json
 ```
+
+Mit `--run-case ID --run-model NAME --run-input SHA256` wird eine Beobachtung an den Lauf gebunden, der sie erzeugt hat. Trägt ein Kriterium dasselbe dreiteilige `run`-Objekt, lehnt `gate` Belege aus einem anderen Lauf ab, auch wenn Bytes und Revision identisch sind; die Bindung ist Buchführung, keine Authentifizierung.
 
 `revision` sind die ersten 12 Hex-Zeichen des sha256 der Datei — niemand zählt eine Version von Hand hoch: wird die Datei erneut registriert, gilt jeder an die alte Revision gebundene Beleg als veraltet, und nur die davon abhängigen Kriterien müssen erneut geprüft werden. `init` überschreibt nichts; eine neue Vorlage besteht `validate` und **scheitert an `gate`**, solange Kriterien nicht verifiziert sind. `gate` weist außerdem zurück: einen zugangsdatenförmigen Wert im Zustand, einen unveränderten Wiederholungsversuch, einen dritten Versuch ohne Hypothesenwechsel, einen gebündelten nächsten Schritt, einen Zeitstempel in der Zukunft, ein Artefakt ohne Beleg und eine Abkürzung ohne Auslöser für die Rückkehr. Geprüft werden Buchhaltung und lokale Hashes — **nicht** inhaltliche Richtigkeit oder entfernte Ergebnisse. `migrate` hebt einen v1-Datensatz auf v2 und bindet Belege nur neu, solange der Inhalts-Hash noch passt. Details: [Checkpoint-Spezifikation](references/state.md).
 

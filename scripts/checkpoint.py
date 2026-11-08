@@ -112,6 +112,9 @@ STATUS = ('in_progress', 'blocked', 'complete')
 CRITERION = ('pending', 'verified', 'failed', 'unobservable')
 RESULTS = ('pass', 'fail', 'unknown')
 KINDS = ('local', 'external')
+# Optional run binding. It records which case/model/input produced an observation
+# so a criterion cannot be completed with a byte-identical result from another run.
+RUN_FIELDS = frozenset({'case_id', 'model', 'input_sha256'})
 CLASSES = ('callable', 'installed_unavailable', 'discovered', 'unavailable')
 REPORT_STATES = ('progress', 'waiting', 'ready', 'blocked', 'failed', 'dropped')
 REPORT_NEEDS_PERSON = ('ready', 'blocked', 'failed')
@@ -818,6 +821,12 @@ def check_evidence(state, base, errors, gate):
             errors.append(label + ': unknown_reason required when result is unknown')
         if ev.get('kind') == 'external' and not nonempty(ev.get('summary')):
             errors.append(label + ': external observation needs a summary')
+        if 'run' in ev:
+            run = ev['run']
+            if (not isinstance(run, dict) or set(run) != RUN_FIELDS
+                    or any(not nonempty(run.get(k)) for k in RUN_FIELDS)):
+                errors.append(label + ': run must map exactly case_id, model and input_sha256 '
+                                       'to nonempty strings')
         if 'unverified' in ev:
             # Representation contract: absent means verified; present must be
             # exactly true and needs a reason. False is not a way to opt out.
@@ -872,6 +881,13 @@ def check_acceptance(state, errors, gate):
         for ref in ids:
             if ref not in evidence:
                 errors.append(label + ': unknown evidence ' + ref)
+        criterion_run = item.get('run')
+        if 'run' in item:
+            if (not isinstance(criterion_run, dict) or set(criterion_run) != RUN_FIELDS
+                    or any(not nonempty(criterion_run.get(k)) for k in RUN_FIELDS)):
+                errors.append(label + ': run must map exactly case_id, model and input_sha256 '
+                                       'to nonempty strings')
+                criterion_run = None
         if not gate:
             continue
         if item.get('status') == 'unobservable':
@@ -886,6 +902,8 @@ def check_acceptance(state, errors, gate):
                 ev = evidence.get(ref, {})
                 if ev.get('result') != 'pass':
                     errors.append(label + ': failed or unknown evidence ' + ref)
+                if criterion_run is not None and ev.get('run') != criterion_run:
+                    errors.append(label + ': evidence %s is not from the criterion\'s run' % ref)
 
 
 def check_waivers(state, errors):
@@ -1511,6 +1529,12 @@ def cmd_evidence(args):
              'artifact_ids': ids,
              'artifact_revisions': {i: arts[i].get('revision') for i in ids},
              'observed_at': args.observed_at or iso(now()), 'result': args.result}
+    run_flags = (args.run_case, args.run_model, args.run_input)
+    if any(run_flags):
+        if not all(nonempty(x) for x in run_flags):
+            raise SystemExit('--run-case, --run-model and --run-input must be given together')
+        entry['run'] = {'case_id': args.run_case, 'model': args.run_model,
+                        'input_sha256': args.run_input}
     if args.summary:
         entry['summary'] = args.summary
     if args.result == 'unknown':
@@ -1693,6 +1717,9 @@ def main():
     p.add_argument('--summary')
     p.add_argument('--unknown-reason')
     p.add_argument('--observed-at')
+    p.add_argument('--run-case', help='run binding: the case this observation belongs to')
+    p.add_argument('--run-model', help='run binding: the model or runner identity')
+    p.add_argument('--run-input', help='run binding: sha256 of the exact input observed')
     p.set_defaults(func=cmd_evidence)
 
     p = sub.add_parser(

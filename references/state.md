@@ -36,11 +36,14 @@ of that label.
   from coverage.
 - `evidence[]`: id, kind, locator, `artifact_ids[]`, `artifact_revisions{id: rev}`,
   `observed_at` (ISO-8601 with offset, not in the future), `result`
-  (pass/fail/unknown). `unknown` needs `unknown_reason`; external evidence needs
-  `summary`. Optional: `unverified: true` with `unverified_reason`, and
+  (pass/fail/unknown). Optional `run{case_id, model, input_sha256}` records which
+  run produced the observation; it is bookkeeping, not authentication. `unknown`
+  needs `unknown_reason`; external evidence needs `summary`. Optional:
+  `unverified: true` with `unverified_reason`, and
   `source_revision` (only together with `unverified: true`).
 - `acceptance[]`: id, criterion, status (pending/verified/failed/unobservable),
-  `evidence_ids[]`.
+  `evidence_ids[]`. Optional `run{case_id, model, input_sha256}`: a criterion that
+  carries it is satisfied only by evidence carrying the identical object.
 - `waivers[]`: criterion_id, reason, approved_by, approved_at. Required to complete
   over an `unobservable` criterion; silence is not consent.
 - `attempts[]`: `blocker_key`, `action`, `error`, `hypothesis_before`,
@@ -55,7 +58,8 @@ of that label.
 
 A criterion that is not verified; a verified criterion without evidence; a failed or
 unknown observation standing behind a verified criterion; an evidence entry marked
-`unverified` or bound to an older artifact revision; a `revision: ""`; a non-boolean
+`unverified` or bound to an older artifact revision; a criterion whose `run` binding
+does not match the cited evidence's `run`; a `revision: ""`; a non-boolean
 `supporting`; a `source_revision` without `unverified: true`; a missing file or hash
 mismatch; an artifact no evidence binds;
 an unchanged retry (same action and error) or three attempts on one blocker without a

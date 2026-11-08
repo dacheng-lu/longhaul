@@ -2,6 +2,18 @@
 
 ## Unreleased
 
+- **Run binding on evidence and criteria**: an observation may carry
+  `run{case_id, model, input_sha256}` (also written by
+  `checkpoint.py evidence --run-case --run-model --run-input`), and a criterion that
+  carries the same object is satisfied only by evidence carrying it. This closes a
+  measured gap: two cases can produce byte-identical artifacts, so the content
+  revision alone cannot tell the runs apart, and a checkpoint citing the other
+  case's evidence passed the gate. The object is bookkeeping, not authentication; it
+  does not prove who ran what. Tests: `tests/test_run_binding.py`, including a
+  baseline record that still passes without any binding.
+- secret scan: `input_sha256` joins the label keys, so a run binding's input digest
+  is not reported as a `long_hex` secret.
+
 - secret scan: a value stored next to a sibling `name` that is itself a credential key
   is now reported. That is how n8n stores HTTP header and OAuth body credentials
   (`{"name": "Secret", "value": "..."}`), and the value's own key is only `value`.
