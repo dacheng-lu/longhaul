@@ -65,3 +65,14 @@ dependency of the other.
 
 [Audit handoff v1](audit-handoff.md) supplies an optional completeness/hash checker
 and a synthetic recovery exercise. It does not automatically grant acceptance.
+
+## Captured release snapshot
+
+FlowLore's `examples/release-digest/reproduce_snapshot.py` now verifies a captured
+public response and an independently prepared expected digest before accepting
+its local report. Its Makeextreme stages run from declared inputs, test output
+drift and use the existing crash-recovery demonstration. The public sample is
+explicitly partial; a passed Longhaul gate records the bounded check and does not
+establish upstream completeness, freshness, authentication or external delivery.
+Reproduce with the exact peer revisions from FlowLore's CI. Longhaul does not fetch
+or execute the snapshot automatically, and task state remains host-managed.
