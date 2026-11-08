@@ -8,9 +8,11 @@
   carries the same object is satisfied only by evidence carrying it. This closes a
   measured gap: two cases can produce byte-identical artifacts, so the content
   revision alone cannot tell the runs apart, and a checkpoint citing the other
-  case's evidence passed the gate. The object is bookkeeping, not authentication; it
-  does not prove who ran what. Tests: `tests/test_run_binding.py`, including a
-  baseline record that still passes without any binding.
+  case's evidence passed the gate. The local-model baseline measured the collision:
+  the digest for `d-valid-3` and for `d-malformed-json` has the same sha256
+  (`51eb25da0848fec6…`), from different runs. The object is bookkeeping, not
+  authentication; it does not prove who ran what. Tests: `tests/test_run_binding.py`,
+  including a baseline record that still passes without any binding.
 - secret scan: `input_sha256` joins the label keys, so a run binding's input digest
   is not reported as a `long_hex` secret.
 
