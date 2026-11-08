@@ -42,6 +42,10 @@ budgets. Report completion within budget, cost, unverified outputs and actual
 recovery cost separately. Retain regressions and unsuccessful cases. The current
 Makeextreme paired example is synthetic and does not prove agent effectiveness.
 
-Theory reference: [Kelly (1956), A New Interpretation of Information Rate](https://www.nokia.com/bell-labs/publications-and-media/publications/a-new-interpretation-of-information-rate/).
+Theory reference: [Kelly (1956), A New Interpretation of Information Rate](https://bpb-us-w2.wpmucdn.com/u.osu.edu/dist/7/36891/files/2017/07/Kelly1956-1uwz47o.pdf).
 Kelly optimizes expected log growth under specified gambling assumptions; the
 25% fraction applies to the fair +50%/-40% game, not arbitrary engineering work.
+
+Source copy: Kelly (1956), Bell System Technical Journal 35(4), 917–926;
+DOI 10.1002/j.1538-7305.1956.tb03809.x. The linked Ohio State-hosted PDF
+reproduces the original paper with AT&T permission.
