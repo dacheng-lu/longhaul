@@ -39,6 +39,7 @@ Two additions stay optional, so every older record keeps validating. Record why 
 - Compare observations to the criterion. Separate attempted, produced and verified. Link evidence to the artifact revision it supports.
 - Trigger focused grilling at consequential forks, contradictory evidence, repeated failure or pre-delivery. Challenge the weakest assumption with a discriminating check. Avoid ceremonial fourteen-step reflection.
 - Default to at most two unchanged transient attempts and three meaningfully distinct approaches to one blocker, unless the user sets another budget. Record attempts with `blocker_key`, `hypothesis_before` and `hypothesis_after`: the gate rejects an unchanged retry and three attempts on one blocker without a hypothesis change. Check external effects before retrying an operation that may have succeeded. Change hypothesis, use a safe fallback or report the blocker while continuing independent work.
+- When a real resource budget applies, reserve verification and recovery capacity before another attempt. Use measured costs, keep units separate, and refresh shared allocations on resume. Read [recovery-budget.md](references/recovery-budget.md); do not infer a universal 25% allocation or calibrated probabilities from model confidence.
 - Never lower acceptance criteria merely to declare completion. Record user-approved scope changes explicitly.
 - Give concise progress updates at the host's required cadence: findings, uncertainty and next action.
 
