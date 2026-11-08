@@ -60,3 +60,8 @@ missing output, forged or incomplete records, and uncertain external effects;
 record actual versions and costs. Validate the hash/path rules on both sides and
 keep the demonstration repeatable without requiring either project as a runtime
 dependency of the other.
+
+## Audit-specific local check
+
+[Audit handoff v1](audit-handoff.md) supplies an optional completeness/hash checker
+and a synthetic recovery exercise. It does not automatically grant acceptance.
