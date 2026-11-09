@@ -19,7 +19,7 @@
 **Three independent projects:** [FlowLore](https://github.com/dacheng-lu/flowlore) · [Longhaul](https://github.com/dacheng-lu/longhaul) · [Makeextreme](https://github.com/dacheng-lu/makeextreme)  
 **No shared adapter or automatic handoff is built in.**
 
-[Value validation / 价值验证 / Nutzen prüfen](references/value-validation.md)
+[Value validation / 价值验证 / Nutzen prüfen](references/value-validation.md) · [Zoom out / 目标升维 / Ziel erweitern](references/zoom-out.md)
 
 [Three-project guide / 三项目指南 / Leitfaden für drei Projekte](https://github.com/dacheng-lu/flowlore/blob/main/AGENT-GUIDE.md) · [Joint recovery demo / 联合恢复演示 / Gemeinsames Wiederaufnahme-Beispiel](docs/makeextreme-handoff.md) · [Goal / 项目目标 / Ziel](GOAL.md) · [First checkpoint example / 检查点入门 / Checkpoint-Beispiel](docs/first-checkpoint.md)
 
@@ -34,6 +34,8 @@ Skill version: **1.2** · [Core protocol / 核心流程 / Kernprotokoll](SKILL.m
 Longhaul is a lightweight orchestration skill for long-running research, creation and implementation tasks. It helps an AI assistant preserve task state, select available tools, challenge consequential assumptions and verify deliverables before declaring completion.
 
 It combines **durable checkpoints + MCP/tool discovery + selective model/subagent delegation + ABCD decisions + SECI-inspired learning**. Specialist skills remain responsible for domain-specific work and quality checks.
+
+**Think bigger, then test smaller:** on explicit zoom-out requests or framing stalls, connect the task to its outcome, compare distinct routes and choose one falsifiable experiment. [Protocol and template](references/zoom-out.md); no promised 10x gain or automatic scope expansion.
 
 ### The task lifecycle
 
@@ -144,6 +146,8 @@ Useful contributions include reproducible recovery scenarios, clearer host setup
 
 它结合了 **持久化检查点 + MCP／工具发现 + 按需模型／子代理委派 + ABCD 决策 + SECI 式经验积累**。具体领域的执行与质量检查仍由相应专业 Skill 负责。
 
+**目标升维，再用小实验验证：** 明确要求跳出局限或陷入同一框架时，连接任务与真实目标，比较不同路径，选一个可证伪实验。[流程与模板](references/zoom-out.md)；不承诺十倍收益，不自动扩大权限。
+
 ### 任务如何推进
 
 ```mermaid
@@ -238,6 +242,8 @@ python3 scripts/checkpoint.py gate ../longhaul-state/task.json
 Longhaul ist ein schlanker Orchestrierungs-Skill für länger dauernde Recherche-, Gestaltungs- und Implementierungsaufgaben. Er hilft einem KI-Assistenten, den Aufgabenstand zu sichern, verfügbare Werkzeuge auszuwählen, wichtige Annahmen zu hinterfragen und Ergebnisse vor dem Abschluss zu prüfen.
 
 Er verbindet **dauerhafte Checkpoints + MCP- und Werkzeugerkennung + gezielten Einsatz von Modellen und Subagenten + ABCD-Entscheidungen + SECI-inspirierte Wissensentwicklung**. Fachspezifische Skills übernehmen weiterhin die eigentliche Facharbeit und deren Qualitätsprüfung.
+
+**Größer denken, begrenzt testen:** Bei explizitem Zoom-out oder einer festgefahrenen Sichtweise das Ziel klären, unterschiedliche Wege vergleichen und ein widerlegbares Experiment wählen. [Protokoll und Vorlage](references/zoom-out.md); kein versprochener 10x-Effekt und keine automatische Ausweitung der Befugnisse.
 
 ### Ablauf einer Aufgabe
 
@@ -337,6 +343,8 @@ The implementation documents are currently in English. 本节链接的实现文�
 | [references/state.md](references/state.md) | Checkpoint contract · 检查点约定 · Checkpoint-Spezifikation |
 | [references/capabilities.md](references/capabilities.md) | Tools and delegation · 工具与委派 · Werkzeuge und Delegation |
 | [references/grill.md](references/grill.md) | ABCD decision review · ABCD 决策审查 · ABCD-Entscheidungsprüfung |
+| [references/zoom-out.md](references/zoom-out.md) | Bounded reframing · 目标升维 · Begrenzter Perspektivwechsel |
+| [references/zoom-out-sources.md](references/zoom-out-sources.md) | Five inspected sources · 五份来源 · Fünf geprüfte Quellen |
 | [references/learning.md](references/learning.md) | SECI and lessons · SECI 与经验积累 · SECI und Lektionen |
 | [scripts/checkpoint.py](scripts/checkpoint.py) | State validator · 状态验证器 · Zustandsvalidator |
 | [scripts/secret_scan.py](scripts/secret_scan.py) | Credential detector · 凭证检测器 · Zugangsdaten-Erkennung |
