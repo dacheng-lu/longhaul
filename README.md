@@ -116,6 +116,17 @@ Keep task state outside the installed skill directory and persist it through the
 - The eval harness compares conditions on fixed fixture scenarios; a higher score is comparative evidence about the skill, not a guarantee that your task's result is correct.
 - A live model evaluation is **blocked**: no credential boundary can be proven against an untrusted subject, so no runner API reads, copies or accepts a key and the harness runs the verified offline test double only. A future live pilot needs an authorized, independently audited credential broker.
 
+### Local-model evaluation runs
+
+For a long local-model matrix, `scripts/eval_verify.py verify RUN_DIR` checks a
+frozen `contract.json`, `run.json`, `metrics.json` and the raw attempts under
+`attempts/`. It keeps three outcomes apart: execution completion, evidence
+validity and quality-gate pass. A finished model that fails a gate is a valid
+run with `quality_gate_status: fail`; a missing raw trace or a short coverage
+count is `evidence_status: invalid`. Exit code 0 only means
+`verification.json` was written. See [docs/eval-verify.md](docs/eval-verify.md)
+and `schemas/eval-contract.schema.json`.
+
 ### Contributing
 
 Useful contributions include reproducible recovery scenarios, clearer host setup instructions and checks that catch unsupported completion claims. Include the expected behavior, observed behavior and verification steps. Never include credentials or private task data.

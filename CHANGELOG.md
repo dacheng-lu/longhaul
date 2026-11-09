@@ -2,6 +2,16 @@
 
 ## Unreleased
 
+- **Local-model evaluation profile**: `skills/local-model-long-eval/SKILL.md`
+  freezes the procedure for long model matrices; `schemas/eval-contract.schema.json`
+  defines the contract; `scripts/eval_verify.py verify RUN_DIR` checks matrix
+  identity, binding, coverage, raw traces and gates. Execution completion,
+  evidence validity and quality-gate pass are separate fields, so a finished
+  model that fails a gate is not reported as an invalid run. Tests:
+  `tests/test_eval_verify.py` (10 behaviour cases, including empty metrics,
+  short coverage, tampered binding, duplicated labels, zero scores and
+  artifact SHA-256).
+
 - **Run binding on evidence and criteria**: an observation may carry
   `run{case_id, model, input_sha256}` (also written by
   `checkpoint.py evidence --run-case --run-model --run-input`), and a criterion that
