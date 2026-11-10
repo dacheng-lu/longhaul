@@ -1405,7 +1405,11 @@ def _attempt_double(execdir, token):
     except OSError as exc:
         raise DoubleRejected('cannot write the attempt copy: %s' % exc) from None
     copied = _read_regular(target, limit=MAX_ARTIFACT_BYTES)
-    if copied is None or hashlib.sha256(copied).hexdigest() != want:
+    if copied is None:
+        raise DoubleRejected('the attempt copy cannot be read safely; check the '
+                             'sandbox root and its parent directories for symlinks, '
+                             'non-regular files or permissions')
+    if hashlib.sha256(copied).hexdigest() != want:
         raise DoubleRejected('the attempt copy of the double does not match the '
                              'verified content')
     exec_argv = [str(Path(os.path.realpath(sys.executable))), str(target)] + list(token.tail)

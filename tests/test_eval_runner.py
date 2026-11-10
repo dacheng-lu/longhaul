@@ -2398,6 +2398,20 @@ class TestR7Judge:
 # --------------------------------------------------------------------------- #
 
 class TestR8Token:
+    def test_symlinked_attempt_root_fails_closed_with_actionable_message(self, tmp_path):
+        state = clean_state(tmp_path)
+        entry = double_copy(tmp_path / 'entry.py')
+        token = H.verified_double([str(entry), '--fake-home', str(state)], state)
+        real = tmp_path / 'real'
+        real.mkdir()
+        alias = tmp_path / 'alias'
+        alias.symlink_to(real, target_is_directory=True)
+        with pytest.raises(H.DoubleRejected, match='cannot be read safely.*symlinks'):
+            H._attempt_double(alias, token)
+        _, digest, copy = H._attempt_double(real, token)
+        assert digest == token.digest
+        assert Path(copy).read_bytes() == token.repository_bytes
+
     def test_a_swap_after_the_gate_never_reaches_the_attempt(self, tmp_path):
         """R8 T1: the copy comes from the repository bytes, not the caller path."""
         state = clean_state(tmp_path)
