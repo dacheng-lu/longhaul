@@ -2,6 +2,11 @@
 
 ## Unreleased
 
+- **Bounded zoom-out**: optional goal/outcome/system framing, readiness inventory,
+  one generative move and one falsifiable experiment. Includes a brief template,
+  five-source lineage and seven behavioral evaluation cases. No checkpoint schema
+  migration, runtime adapter or guaranteed 10x improvement.
+
 - **Local-model evaluation profile**: `skills/local-model-long-eval/SKILL.md`
   freezes the procedure for long model matrices; `schemas/eval-contract.schema.json`
   defines the contract; `scripts/eval_verify.py verify RUN_DIR` checks matrix

@@ -1,6 +1,6 @@
 ---
 name: longhaul
-description: "远航 · Longhaul coordinates complex long-horizon research, creation and implementation using durable checkpoints, available MCP/tool discovery, bounded model/subagent delegation, ABCD choices with a recommendation, evidence-based recovery and completion, and SECI-inspired learning. Use when the user requests Longhaul/远航, long-task safeguards, cross-session continuation, repeated-failure recovery, or this combined workflow. Skip routine one-step tasks unless explicitly requested."
+description: "远航 · Longhaul coordinates complex long-horizon research, creation and implementation using durable checkpoints, available MCP/tool discovery, bounded model/subagent delegation, ABCD choices with a recommendation, evidence-based recovery and completion, and SECI-inspired learning. Use when the user requests Longhaul/远航, long-task safeguards, cross-session continuation, repeated-failure recovery, bounded zoom-out / bigger-goal / 10x exploration, or this combined workflow. Skip routine one-step tasks unless explicitly requested."
 ---
 
 # 远航 · Longhaul
@@ -18,6 +18,18 @@ Support sustained progress, recoverable work and honest delivery. Treat this ski
 5. Choose one concrete next action and a small milestone. Continue authorized work autonomously. Ask only questions that materially affect the outcome; consult [grill.md](references/grill.md).
 
 For a consequential investment or product decision, optionally use [value-validation.md](references/value-validation.md) to test the weakest value assumption before expanding work. Apply the purpose-specific criteria; do not require monetization for noncommercial tasks.
+
+## Zoom out when the frame is the problem
+
+When explicitly asked to think bigger, find the goal behind the goal, 整点新鲜的,
+or when repeated attempts stay inside one unhelpful frame, read
+[zoom-out.md](references/zoom-out.md). Preserve the original request; connect task,
+outcome and a possible standing system; inspect readiness; generate different
+frames with one deliberate move; select one bounded, falsifiable experiment.
+Treat 10x as a measurable hypothesis, never a promise or an authorization increase.
+Keep routine fixes direct. Return to execution after the short strategic pass.
+Use the [brief template](references/zoom-out-template.md) when a durable decision
+record helps; [source lineage](references/zoom-out-sources.md) documents adaptations.
 
 ## Keep durable task state
 
