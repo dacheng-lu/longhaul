@@ -25,6 +25,8 @@
 
 Skill version: **1.2** · [Core protocol / 核心流程 / Kernprotokoll](SKILL.md) · [Apache-2.0](LICENSE)
 
+**Specialist skill / 专项技能 / Spezialisierter Skill:** [Longhaul Captain](skills/longhaul-captain/SKILL.md) — plan and verify local wiki-backed browser games / 规划并验证本地 Wiki 浏览器游戏 / lokale Wiki-Browserspiele planen und prüfen.
+
 [Roadmap / 升级路线图 / Entwicklungsplan](ROADMAP.md) — priorities, acceptance criteria and Harness Engineering positioning; proposed work, not shipped features.
 
 ## English

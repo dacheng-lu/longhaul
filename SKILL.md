@@ -59,6 +59,11 @@ Two additions stay optional, so every older record keeps validating. Record why 
 
 Use supported subagents for separable research, implementation or independent review when benefit exceeds coordination cost. Default to zero for small work and at most two concurrent workers for complex work, within host limits. Use only enumerated models and actual model-selection parameters. Read [capabilities.md](references/capabilities.md). If delegation is unavailable, work sequentially; never fabricate a worker result.
 
+For a local wiki-backed browser game, use the sibling
+[longhaul-captain](skills/longhaul-captain/SKILL.md) skill: it adds an
+interpretation gate, source-backed content checks and separate local, Deck and
+LAN evidence gates.
+
 ## Grill with ABCD + recommendation
 
 For consequential user-owned choices, present four genuinely distinct options A–D with tradeoffs, mark one recommended choice and explain why. Permit free-form responses. Use fewer options if four are artificial or the host cannot support them. Never use a clarification widget for approval. Read [grill.md](references/grill.md) for triggers and UI adaptation.
