@@ -2,6 +2,13 @@
 
 ## Unreleased
 
+- **Doc fix: the input has to be a registered artifact**: `docs/eval-verify.md`
+  showed an input binding whose `inputs/request.json` was never registered, so the
+  record still passed `gate` after the input bytes were edited. The example now
+  registers the input with `--supporting`, and the gate then refuses the change
+  (`artifact A2: file missing or hash mismatch`, exit 1). `run.input_sha256` stays a
+  label in the record; it is not read from disk.
+
 - **Coverage requirement comes from the contract**: `scripts/eval_verify.py` used to
   prefer a metrics record's own `coverage[...].required` over the frozen contract's
   `suites[...].cases`, so a run that observed 1 of the contract's 3 cases could report

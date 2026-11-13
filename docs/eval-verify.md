@@ -48,9 +48,16 @@ bytes (including any frozen retrieved context), then record the same run object
 on the evidence and its acceptance criterion. The checkpoint gate compares all
 three fields, so reusing evidence after changing only the input hash is refused.
 
+Register the input as a supporting artifact first: the gate can only refuse bytes
+it can hash, and `run.input_sha256` is a label the record carries, not a file the
+gate reads. Without the second `artifact` step below, the record still passes
+after `inputs/request.json` is edited.
+
 ```sh
+python3 scripts/checkpoint.py artifact state.json --id A2 \
+  --locator inputs/request.json --supporting
 input_sha256=$(sha256sum inputs/request.json | cut -d ' ' -f 1)
-python3 scripts/checkpoint.py evidence state.json --id E1 --artifact A1 \
+python3 scripts/checkpoint.py evidence state.json --id E1 --artifact A1 --artifact A2 \
   --result pass --run-case d-valid-3 --run-model lfm3:1.7b \
   --run-input "$input_sha256"
 ```
