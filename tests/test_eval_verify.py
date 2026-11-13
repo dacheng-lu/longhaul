@@ -192,3 +192,17 @@ def test_duplicate_metric_label_is_invalid(tmp_path):
     write(run / "metrics.json", m)
     _, data = verify(run)
     assert any("duplicate metrics entry" in f for f in data["failures"])
+
+
+def test_gate_values_are_truthiness_checked_not_compared(tmp_path):
+    # Characterisation, not an endorsement. Contract gates are free-form labels
+    # (the fixture contract uses {"tg": 5}), so no numeric direction, aggregation
+    # or missing-value rule is defined anywhere. Today only the record's own
+    # truthiness is read: contract accuracy 0.9 with a recorded 0.1 still passes.
+    # If gate semantics are ever defined, this test must be replaced, not edited.
+    run = make_run(tmp_path, gates={"accuracy": 0.1},
+                   contract_mut=lambda c: c.update(gates={"accuracy": 0.9}))
+    proc, data = verify(run)
+    assert proc.returncode == 0
+    assert data["evidence_status"] == "valid"
+    assert data["quality_gate_status"] == "pass"

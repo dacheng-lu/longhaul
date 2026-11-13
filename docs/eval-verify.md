@@ -97,7 +97,13 @@ for the same-input match and the changed-input refusal.
 - `not_run`, `failed` and `aborted` records are allowed and keep the run
   `incomplete`; they are never silently dropped from coverage.
 - Quality gates are evaluated per model; a single false gate makes the overall
-  quality status `fail`.
+  quality status `fail`. Only the record's own gate *values* are read, and only
+  for truthiness: the contract's `gates` object is bound into the run digest but
+  its numbers are never compared with the metrics. Contract semantics are
+  unspecified (the tests use a free-form `{"tg": 5}`), so a contract that says
+  `accuracy: 0.9` and a record that says `0.1` still reports `pass`; this is
+  characterised by `test_gate_values_are_truthiness_checked_not_compared`. Do
+  not read a quality `pass` as a claim about contract thresholds.
 
 ## Not checked
 

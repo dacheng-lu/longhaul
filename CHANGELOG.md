@@ -2,6 +2,16 @@
 
 ## Unreleased
 
+- **Documented: gate values are not compared with the contract**:
+  `scripts/eval_verify.py` reads only the truthiness of the metrics record's own
+  `gates` values; the contract's `gates` numbers are bound into the run digest but
+  never compared. Because contract gate semantics are unspecified, a contract
+  saying `accuracy: 0.9` and a record saying `0.1` still reports
+  `quality_gate_status: pass`. `docs/eval-verify.md` now says so beside the
+  quality definition and
+  `test_gate_values_are_truthiness_checked_not_compared` pins the current
+  behaviour. No semantics were invented; defining them is a separate decision.
+
 - **Doc fix: the input has to be a registered artifact**: `docs/eval-verify.md`
   showed an input binding whose `inputs/request.json` was never registered, so the
   record still passed `gate` after the input bytes were edited. The example now
