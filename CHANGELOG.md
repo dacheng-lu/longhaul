@@ -2,6 +2,13 @@
 
 ## Unreleased
 
+- **Coverage requirement comes from the contract**: `scripts/eval_verify.py` used to
+  prefer a metrics record's own `coverage[...].required` over the frozen contract's
+  `suites[...].cases`, so a run that observed 1 of the contract's 3 cases could report
+  `evidence_status: valid` with `execution_status: complete`. The contract now sets the
+  floor and a record may only raise it. Tests:
+  `tests/test_eval_verify.py::test_the_record_cannot_lower_the_contracts_coverage_requirement`.
+
 - **Bounded zoom-out**: optional goal/outcome/system framing, readiness inventory,
   one generative move and one falsifiable experiment. Includes a brief template,
   five-source lineage and seven behavioral evaluation cases. No checkpoint schema

@@ -83,6 +83,8 @@ for the same-input match and the changed-input refusal.
   labels fail.
 - A completed model has non-empty scores, non-empty gate results, all required
   suites at `observed >= required`, and at least one non-empty raw file.
+- `required` is the contract's `cases` count. A metrics record may declare a higher
+  bar (and must then meet it) but cannot lower what the frozen contract asked for.
 - Raw paths must stay inside the run directory.
 - Zero is a valid score. Empty or missing metrics are not.
 - `not_run`, `failed` and `aborted` records are allowed and keep the run

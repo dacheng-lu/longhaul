@@ -257,7 +257,15 @@ def verify(run_dir: Path, check_artifacts: bool, artifacts_dir: Path | None) -> 
                         if not isinstance(cov, dict):
                             failures.append(f"{label}: missing coverage for {sid}")
                             continue
-                        req = cov.get("required", expected_n)
+                        # The contract is the frozen requirement. A metrics
+                        # record that declares a smaller `required` describes its
+                        # own bar, so it can raise what must be shown but never
+                        # lower what the contract asked for.
+                        req = (expected_n if isinstance(expected_n, int)
+                               and not isinstance(expected_n, bool) else None)
+                        declared = cov.get("required")
+                        if isinstance(declared, int) and not isinstance(declared, bool):
+                            req = declared if req is None else max(req, declared)
                         obs = cov.get("observed")
                         if not isinstance(obs, int) or isinstance(obs, bool) or obs < 0:
                             failures.append(f"{label}: invalid observed count for {sid}")

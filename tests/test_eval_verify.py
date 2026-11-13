@@ -117,6 +117,29 @@ def test_short_coverage_is_invalid(tmp_path):
     assert any("coverage extra 2/3" in f for f in data["failures"])
 
 
+def test_the_record_cannot_lower_the_contracts_coverage_requirement(tmp_path):
+    # The contract is the frozen requirement. A metrics record that declares a
+    # smaller `required` describes its own bar; it must not turn a run that saw
+    # 1 of the contract's 3 cases into valid evidence.
+    _, data = verify(make_run(tmp_path, coverage={
+        "extra": {"required": 1, "observed": 1},
+        "wiki": {"required": 1, "observed": 1},
+    }))
+    assert data["evidence_status"] == "invalid"
+    assert data["execution_status"] == "complete"
+    assert any("coverage extra 1/3" in f for f in data["failures"]), data["failures"]
+
+
+def test_a_record_that_declares_a_higher_bar_must_also_meet_it(tmp_path):
+    _, data = verify(make_run(tmp_path, coverage={
+        "extra": {"required": 5, "observed": 4},
+        "wiki": {"required": 2, "observed": 2},
+    }))
+    assert data["evidence_status"] == "invalid"
+    assert any("coverage extra 4/5" in f for f in data["failures"]), data["failures"]
+
+
+
 def test_missing_raw_is_invalid(tmp_path):
     _, data = verify(make_run(tmp_path, raw=False))
     assert data["evidence_status"] == "invalid"
