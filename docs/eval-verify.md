@@ -41,6 +41,42 @@ python3 scripts/eval_verify.py verify path/to/run --json
 `--check-artifacts` hashes each model file and compares exact bytes and SHA-256
 with the matrix. It is opt-in because a model set can be tens of gigabytes.
 
+## Bind checkpoint evidence to an input
+
+For evidence produced by a particular local-model case, hash the exact request
+bytes (including any frozen retrieved context), then record the same run object
+on the evidence and its acceptance criterion. The checkpoint gate compares all
+three fields, so reusing evidence after changing only the input hash is refused.
+
+```sh
+input_sha256=$(sha256sum inputs/request.json | cut -d ' ' -f 1)
+python3 scripts/checkpoint.py evidence state.json --id E1 --artifact A1 \
+  --result pass --run-case d-valid-3 --run-model lfm3:1.7b \
+  --run-input "$input_sha256"
+```
+
+Add this object to the criterion in `state.json` before running `gate`:
+
+```json
+{
+  "id": "C1",
+  "criterion": "The case output matches its expected result",
+  "status": "verified",
+  "evidence_ids": ["E1"],
+  "run": {
+    "case_id": "d-valid-3",
+    "model": "lfm3:1.7b",
+    "input_sha256": "<the SHA-256 printed above>"
+  }
+}
+```
+
+An artifact edit also makes evidence tied to its older revision stale, and
+evidence with `result: fail` or `unknown` cannot satisfy a verified criterion.
+These checks validate record consistency; they do not authenticate who ran the
+model or prove the model's answer is correct. See `tests/test_run_binding.py`
+for the same-input match and the changed-input refusal.
+
 ## Rules
 
 - Every matrix label has exactly one metrics record; duplicates and unknown

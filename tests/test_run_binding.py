@@ -72,6 +72,13 @@ class RunBinding(unittest.TestCase):
         self.assertEqual(code, 1)
         self.assertIn("is not from the criterion's run", " ".join(payload["errors"]))
 
+    def test_same_case_and_model_with_a_different_input_cannot_reuse_evidence(self):
+        other_input = dict(RUN_A, input_sha256="b" * 64)
+        code, payload, _ = call("gate", record(evidence_run=RUN_A,
+                                                criterion_run=other_input))
+        self.assertEqual(code, 1)
+        self.assertIn("is not from the criterion's run", " ".join(payload["errors"]))
+
     def test_a_criterion_with_a_run_needs_bound_evidence(self):
         code, payload, _ = call("gate", record(criterion_run=RUN_A))
         self.assertEqual(code, 1)
