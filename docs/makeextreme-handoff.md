@@ -76,3 +76,9 @@ explicitly partial; a passed Longhaul gate records the bounded check and does no
 establish upstream completeness, freshness, authentication or external delivery.
 Reproduce with the exact peer revisions from FlowLore's CI. Longhaul does not fetch
 or execute the snapshot automatically, and task state remains host-managed.
+
+## Website work
+
+The [website handoff](web-handoff.md) describes how to reconcile a page,
+runner results and external effects across interruption using the existing
+checkpoint helper. It does not define an automatic adapter.
