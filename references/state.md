@@ -18,9 +18,11 @@ bookkeeping and local file hashes. It cannot decide whether the work is correct.
 
 `revision` is derived from the file, not typed by a human. Registering an artifact
 again after editing it produces a new revision, and every piece of evidence bound
-to the old one is reported **stale** — but only the criteria that cite that evidence
-are affected. That is the point of v2: one changed deliverable no longer invalidates
-the whole record, and nobody is tempted to bump a label instead of re-running a check.
+to the old one is reported **stale**. The gate refuses the record while any such
+observation remains, cited or not, so re-observe the check under the same evidence
+id to replace it; a failure on the discarded revision belongs in `attempts`. That is
+the point of v2: one changed deliverable leaves the other deliverables' evidence
+alone, and nobody is tempted to bump a label instead of re-running a check.
 
 External artifacts have no content hash, so their `revision` is a label you supply
 (commit SHA, release tag, observation date). Its authority is exactly the credibility

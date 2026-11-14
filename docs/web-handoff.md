@@ -47,10 +47,22 @@ bounded observation (replace all paths and descriptions with the actual case):
 ```bash
 python3 scripts/checkpoint.py artifact /path/to/task.json --id A1 --locator /path/to/page.html
 # After independently checking the current page:
-python3 scripts/checkpoint.py evidence /path/to/task.json --id E1 --artifact A1 --result pass --summary 'Describe the check actually performed'
+python3 scripts/checkpoint.py evidence /path/to/task.json --id E1 --artifact A1 --result pass \
+  --run-case your-case-id --run-model 'google-chrome-stable <version> headless' \
+  --run-input "$(sha256sum /path/to/page.html | cut -d' ' -f1)" \
+  --summary 'Describe the check actually performed'
 python3 scripts/checkpoint.py validate /path/to/task.json
 python3 scripts/checkpoint.py gate /path/to/task.json
 ```
+
+The three `--run-*` options are all-or-nothing and are stored with the
+observation. An acceptance entry that carries the same `run` object is satisfied
+only by evidence with an identical one, so copy the new binding into those
+criteria whenever you re-observe.
+
+If the page is served over HTTP, hash what the browser received
+(`curl -s URL | sha256sum`) and compare it with the registered artifact: a file
+that is identical on disk does not prove the same bytes were rendered.
 
 The gate also requires acceptance entries that cite the evidence; see the
 [checkpoint contract](../references/state.md) and the runnable
@@ -62,6 +74,12 @@ reassess which checks must be repeated; the helper only detects changes to
 registered local artifact bytes, not every dependency of a check. Re-register a
 changed artifact and re-check it before recording new evidence. Old observations
 bound to its prior revision must not be treated as current.
+
+Re-record a re-check under the **same** evidence id: the entry is replaced, and
+that replacement is what clears the stale state. A superseded observation left
+in the record blocks the gate even when no criterion cites it, and the helper has
+no command to delete one. A failure seen on a discarded revision belongs in
+`attempts`, with its log registered as a `--supporting` artifact.
 
 The checkpoint does not authenticate the operator or prove that a reported check
 occurred. It is not a runner, deployment system, or security boundary. Actual
