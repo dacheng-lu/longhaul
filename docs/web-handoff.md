@@ -60,11 +60,13 @@ observation. An acceptance entry that carries the same `run` object is satisfied
 only by evidence with an identical one, so copy the new binding into those
 criteria whenever you re-observe.
 
-If the page is served over HTTP, hash what the browser received
-(`curl -s URL | sha256sum`) and compare it with the registered artifact: a file
-that is identical on disk does not prove the same bytes were rendered.
+If the page is served over HTTP, fetch the same URL with a plain client
+(`curl -s URL | sha256sum`) and compare that digest with the registered artifact.
+This compares the response one client received; it does not prove the browser
+received or rendered those bytes, so record the client in the observation.
 
-The gate also requires acceptance entries that cite the evidence; see the
+The gate requires every verified criterion to cite current passing evidence; an
+`unobservable` criterion needs a recorded waiver instead. See the
 [checkpoint contract](../references/state.md) and the runnable
 [first checkpoint example](first-checkpoint.md). Register the page and any
 other deliverables separately, and bind each observation to every file it
