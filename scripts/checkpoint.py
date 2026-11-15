@@ -2,7 +2,8 @@
 """Validate Longhaul bookkeeping; never claim to verify substantive truth.
 
 Schema v2. Evidence is bound to artifacts by content-addressed revision, so a
-changed file invalidates exactly the criteria that depend on it. Nothing here
+changed file makes every observation bound to the old revision stale; the gate
+refuses the record until they are re-observed. Nothing here
 can judge whether the work is correct -- only whether the record is coherent.
 
 Revision contract (v1 -> v2, ``migrate``) -- three sources, no precedence::
