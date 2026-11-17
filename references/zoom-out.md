@@ -47,6 +47,21 @@ Do not cycle through all five moves or generate a long idea list. If the move
 fails, allow one re-diagnosis, then return to the authorized task with the uncertainty.
 Default budget: one short decision brief, one generation pass and one selection pass.
 
+### Check the path before adding work
+
+When comparing frames, consider removing or combining a step, not merely making
+it faster. State its function and the evidence that the remaining path preserves
+that function and the same acceptance criteria. Preserve the user’s requirements,
+authorization, necessary approvals, data integrity and recovery. Absence of a past
+failure is not evidence that a control is unnecessary.
+
+Name the primary metric and baseline. Distinguish an ideal lower bound from the
+shortest feasible path under real constraints; label estimates and unknowns. Use
+one small reversible test where feasible before generalizing. Record any accepted shortcut in the
+existing `shortcuts[]` (`what`, `ceiling`, `upgrade_trigger`); record observations
+as evidence rather than claiming a saving before it is measured. This check adds
+no automatic router or requirement to run a full zoom-out for a routine fix.
+
 ## 4. Select an opportunity, not an adjective
 
 Compare against the current alternative, including doing less or stopping. Assess:

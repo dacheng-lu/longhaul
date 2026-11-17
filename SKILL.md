@@ -19,6 +19,23 @@ Support sustained progress, recoverable work and honest delivery. Treat this ski
 
 For a consequential investment or product decision, optionally use [value-validation.md](references/value-validation.md) to test the weakest value assumption before expanding work. Apply the purpose-specific criteria; do not require monetization for noncommercial tasks.
 
+## Choose a necessary path
+
+For an architecture choice, recurring workflow, measured bottleneck or visibly
+expanded scope, make a short necessity pass before committing to a plan. Clarify
+the requested task and desired result without changing the user’s goal. Identify
+steps that can be omitted or combined and what function they still need to serve.
+Compare the shortest feasible path under the actual constraints with the current
+path, naming the metric and evidence; label an ideal lower bound or an estimate as
+such. Where feasible, test a small reversible change against the same acceptance
+criteria; do not claim a saving without a comparable observation. Preserve user
+requirements, authorization, data integrity, required approvals and recovery.
+Use `shortcuts[]` for an accepted limitation and its upgrade trigger, not a new
+ledger. Proceed directly on a clear local fix or a suitable established recipe;
+this pass is not mandatory overhead for every task. An applicable recipe is not
+proof of an automatic handoff. See [zoom-out.md](references/zoom-out.md) for a
+larger reframing and experiment when needed.
+
 ## Zoom out when the frame is the problem
 
 When explicitly asked to think bigger, find the goal behind the goal, 整点新鲜的,
