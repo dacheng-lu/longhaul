@@ -19,6 +19,10 @@ CHANGELOG = REPO / 'CHANGELOG.md'
 RELEASE = '1.2'
 RELEASE_DATE = '2026-11-01'
 
+# The checkout must keep the full history, and the check must read the setting itself:
+# a commented-out `# fetch-depth: 0` satisfied the old substring test (open finding v1.2.1).
+FETCH_DEPTH_LINE = re.compile(r'^\s+fetch-depth:\s*0\s*$', re.M)
+
 
 def changelog_section(text):
     """The 1.2 section only, without the older releases."""
@@ -96,7 +100,19 @@ class TestCiMatrix:
         default depth of 1."""
         text = CI.read_text()
         step = text.split('actions/checkout@v4', 1)[1].split('- uses:', 1)[0].split('- name:', 1)[0]
-        assert 'fetch-depth: 0' in step, step
+        assert FETCH_DEPTH_LINE.search(step), step
+
+    def test_a_commented_out_fetch_depth_does_not_satisfy_the_checkout_rule(self):
+        """The old assertion was `'fetch-depth: 0' in step`, which a commented-out line satisfies.
+
+        Open finding v1.2.1. The check now reads the line itself, so commenting the setting out
+        must fail it even though the string is still present in the step.
+        """
+        text = CI.read_text()
+        step = text.split('actions/checkout@v4', 1)[1].split('- uses:', 1)[0].split('- name:', 1)[0]
+        commented = '\n'.join('# ' + line if 'fetch-depth' in line else line for line in step.splitlines())
+        assert 'fetch-depth: 0' in commented, commented  # what the old assertion accepted
+        assert not FETCH_DEPTH_LINE.search(commented), commented  # what the check must reject
 
     def test_the_gate_tests_keep_pytests_temp_dir_off_tmp(self):
         """The eval harness masks /tmp (and /var/tmp) inside its sandbox and counts whatever it finds there

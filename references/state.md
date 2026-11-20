@@ -18,9 +18,11 @@ bookkeeping and local file hashes. It cannot decide whether the work is correct.
 
 `revision` is derived from the file, not typed by a human. Registering an artifact
 again after editing it produces a new revision, and every piece of evidence bound
-to the old one is reported **stale** — but only the criteria that cite that evidence
-are affected. That is the point of v2: one changed deliverable no longer invalidates
-the whole record, and nobody is tempted to bump a label instead of re-running a check.
+to the old one is reported **stale**. The gate refuses the record while any such
+observation remains, cited or not, so re-observe the check under the same evidence
+id to replace it; a failure on the discarded revision belongs in `attempts`. That is
+the point of v2: one changed deliverable leaves the other deliverables' evidence
+alone, and nobody is tempted to bump a label instead of re-running a check.
 
 External artifacts have no content hash, so their `revision` is a label you supply
 (commit SHA, release tag, observation date). Its authority is exactly the credibility
@@ -36,11 +38,14 @@ of that label.
   from coverage.
 - `evidence[]`: id, kind, locator, `artifact_ids[]`, `artifact_revisions{id: rev}`,
   `observed_at` (ISO-8601 with offset, not in the future), `result`
-  (pass/fail/unknown). `unknown` needs `unknown_reason`; external evidence needs
-  `summary`. Optional: `unverified: true` with `unverified_reason`, and
+  (pass/fail/unknown). Optional `run{case_id, model, input_sha256}` records which
+  run produced the observation; it is bookkeeping, not authentication. `unknown`
+  needs `unknown_reason`; external evidence needs `summary`. Optional:
+  `unverified: true` with `unverified_reason`, and
   `source_revision` (only together with `unverified: true`).
 - `acceptance[]`: id, criterion, status (pending/verified/failed/unobservable),
-  `evidence_ids[]`.
+  `evidence_ids[]`. Optional `run{case_id, model, input_sha256}`: a criterion that
+  carries it is satisfied only by evidence carrying the identical object.
 - `waivers[]`: criterion_id, reason, approved_by, approved_at. Required to complete
   over an `unobservable` criterion; silence is not consent.
 - `attempts[]`: `blocker_key`, `action`, `error`, `hypothesis_before`,
@@ -55,13 +60,17 @@ of that label.
 
 A criterion that is not verified; a verified criterion without evidence; a failed or
 unknown observation standing behind a verified criterion; an evidence entry marked
-`unverified` or bound to an older artifact revision; a `revision: ""`; a non-boolean
+`unverified` or bound to an older artifact revision; a criterion whose `run` binding
+does not match the cited evidence's `run`; a `revision: ""`; a non-boolean
 `supporting`; a `source_revision` without `unverified: true`; a missing file or hash
 mismatch; an artifact no evidence binds;
 an unchanged retry (same action and error) or three attempts on one blocker without a
 hypothesis change; a bundled `next_action`; a future or timezone-less timestamp; a
 shortcut with no upgrade trigger; a `callable` capability that was never observed
-working; a credential-shaped value anywhere in the document; unresolved blockers; a
+working; a credential-shaped value anywhere in the document (or in the mandate file);
+a `report` whose state is not one of the six or whose reason is empty; `status: complete`
+standing over `blocked` or `failed`; a mandate file that is unreadable, incomplete, or
+missing its `policy_version`; unresolved blockers; a
 `blocked` status; and an empty record on a delivery gate.
 
 It never echoes a matched secret value — it names the location so you can delete it.
@@ -133,6 +142,19 @@ Every other number is stored as the nearest IEEE-754 binary64 value: `1e5` becom
 exact value because integers are not binary64). That is the one place where the "same
 type and value" field contract normalises instead of copying, and it is why a literal
 that would collapse to `0.0` is refused rather than silently changed.
+
+## Optional additions (outside the v2 schema)
+
+`report` answers *why* the unit stopped in a word a machine can sort
+(`progress | waiting | ready | blocked | failed | dropped`); `blockers` keeps the prose a
+human reads. A record without it validates exactly as before, and the gate refuses
+`status: complete` over `blocked` or `failed`. See [report-states.md](report-states.md).
+
+`<record-stem>.mandate.json` answers *why the work may exist and how far it may go*: who
+asked, on which channel, under which policy version, with which scope and strength. Its own
+file because a mandate never changes while the record is rewritten on every step. Optional
+for every existing task; when present it must be complete, credential-free and revalidatable.
+See [mandate.md](mandate.md).
 
 Every path the CLI reads or writes is walked one component at a time through a directory
 descriptor with `O_NOFOLLOW`; the file is opened `O_NONBLOCK` and must be a regular file
