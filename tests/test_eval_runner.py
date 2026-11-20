@@ -318,6 +318,23 @@ def _commit_exists(commit):
     return proc.returncode == 0
 
 
+def _require_commit(commit):
+    """The pinned commits must exist in this checkout.
+
+    A shallow clone silently skipped these two tests, so a CI run with the default
+    checkout depth passed without exercising the pinned conditions (open finding
+    v1.2.1). With CI set a missing commit fails instead; locally it may still skip,
+    because a developer's shallow clone is not a release contract.
+    """
+    if _commit_exists(commit):
+        return
+    message = ('commit %s is not present (shallow clone: the workflow needs '
+               'fetch-depth: 0)' % commit)
+    if os.environ.get('CI'):
+        pytest.fail(message)
+    pytest.skip(message)
+
+
 class TestSkillTree:
     def test_fingerprint_format(self):
         payload = {'a.txt': b'one', 'b/c.txt': b'two'}
@@ -330,8 +347,7 @@ class TestSkillTree:
 
     def test_git_archive_slice_excludes_eval_material(self):
         commit = H.CONDITIONS['v1.1'].commit
-        if not _commit_exists(commit):
-            pytest.skip('commit %s is not present (shallow clone)' % commit)
+        _require_commit(commit)
         payload = H.skill_tree_from_git(REPO, commit)
         assert 'SKILL.md' in payload and 'scripts/checkpoint.py' in payload
         for rel in payload:
@@ -345,8 +361,7 @@ class TestSkillTree:
 
     def test_v1_slice_carries_version_1_0(self):
         commit = H.CONDITIONS['v1'].commit
-        if not _commit_exists(commit):
-            pytest.skip('commit %s is not present (shallow clone)' % commit)
+        _require_commit(commit)
         payload = H.skill_tree_from_git(REPO, commit)
         assert b'Version: 1.0' in payload['SKILL.md']
 
@@ -2383,6 +2398,20 @@ class TestR7Judge:
 # --------------------------------------------------------------------------- #
 
 class TestR8Token:
+    def test_symlinked_attempt_root_fails_closed_with_actionable_message(self, tmp_path):
+        state = clean_state(tmp_path)
+        entry = double_copy(tmp_path / 'entry.py')
+        token = H.verified_double([str(entry), '--fake-home', str(state)], state)
+        real = tmp_path / 'real'
+        real.mkdir()
+        alias = tmp_path / 'alias'
+        alias.symlink_to(real, target_is_directory=True)
+        with pytest.raises(H.DoubleRejected, match='cannot be read safely.*symlinks'):
+            H._attempt_double(alias, token)
+        _, digest, copy = H._attempt_double(real, token)
+        assert digest == token.digest
+        assert Path(copy).read_bytes() == token.repository_bytes
+
     def test_a_swap_after_the_gate_never_reaches_the_attempt(self, tmp_path):
         """R8 T1: the copy comes from the repository bytes, not the caller path."""
         state = clean_state(tmp_path)

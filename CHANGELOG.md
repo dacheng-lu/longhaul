@@ -9,6 +9,62 @@
   output and an outside judge recorded as checkpoint evidence. SKILL.md gains one
   pointer sentence in the ABCD section; no eval scenario covers it yet.
 
+- **Bounded zoom-out**: optional goal/outcome/system framing, readiness inventory,
+  one generative move and one falsifiable experiment. Includes a brief template,
+  five-source lineage and seven behavioral evaluation cases. No checkpoint schema
+  migration, runtime adapter or guaranteed 10x improvement.
+
+- **Local-model evaluation profile**: `skills/local-model-long-eval/SKILL.md`
+  freezes the procedure for long model matrices; `schemas/eval-contract.schema.json`
+  defines the contract; `scripts/eval_verify.py verify RUN_DIR` checks matrix
+  identity, binding, coverage, raw traces and gates. Execution completion,
+  evidence validity and quality-gate pass are separate fields, so a finished
+  model that fails a gate is not reported as an invalid run. Tests:
+  `tests/test_eval_verify.py` (10 behaviour cases, including empty metrics,
+  short coverage, tampered binding, duplicated labels, zero scores and
+  artifact SHA-256).
+
+- **Run binding on evidence and criteria**: an observation may carry
+  `run{case_id, model, input_sha256}` (also written by
+  `checkpoint.py evidence --run-case --run-model --run-input`), and a criterion that
+  carries the same object is satisfied only by evidence carrying it. This closes a
+  measured gap: two cases can produce byte-identical artifacts, so the content
+  revision alone cannot tell the runs apart, and a checkpoint citing the other
+  case's evidence passed the gate. The local-model baseline measured the collision:
+  the digest for `d-valid-3` and for `d-malformed-json` has the same sha256
+  (`51eb25da0848fec6…`), from different runs. The object is bookkeeping, not
+  authentication; it does not prove who ran what. Tests: `tests/test_run_binding.py`,
+  including a baseline record that still passes without any binding.
+- secret scan: `input_sha256` joins the label keys, so a run binding's input digest
+  is not reported as a `long_hex` secret.
+
+- secret scan: a value stored next to a sibling `name` that is itself a credential key
+  is now reported. That is how n8n stores HTTP header and OAuth body credentials
+  (`{"name": "Secret", "value": "..."}`), and the value's own key is only `value`.
+  Measured on real n8n workflow exports: the Autotask header pair produced zero hits
+  before and two after; a 37 kB workflow went from 2 to 12 reported hits, all of them
+  real (`client_secret`, `password`, `access_token`, `Authorization`). `authorization`,
+  `secret` and `apiintegrationcode` join the credential key names, and the pointer
+  exemption (`${VAR}`, `«redacted»`) still applies.
+- release contract: the checkout check reads the `fetch-depth` line itself instead of
+  matching the string anywhere in the step, so a commented-out `# fetch-depth: 0` no longer
+  satisfies it; and the two pinned-commit tests in `test_eval_runner.py` fail instead of
+  skipping when `CI` is set, so a shallow checkout cannot pass silently. Both were open
+  findings of the v1.2 CI audit (`ROADMAP.md`, "Known open findings"); each now has a test
+  that names the old behaviour.
+- **`report`, the stop state** (`report-states.md`, D1): why a task stopped, in a word a
+  machine can sort — `progress | waiting | ready | blocked | failed | dropped` — with the
+  derived `person/*` stages. `blockers` keeps the prose a human reads. Optional, so a 1.2
+  record validates unchanged; the gate refuses a sentence where the state belongs, an empty
+  reason, and `status: complete` standing over `blocked` or `failed` (`dropped` is exempt:
+  work that needed no action can be a completed end).
+- **`mandate`, the authorisation as its own file** (`mandate.md`, D1): `<record-stem>.mandate.json`
+  records who asked, on which channel, under which policy version, with which scope and
+  strength. A separate file because a mandate never changes while the record is rewritten on
+  every step; `mandate` refuses to overwrite (a wider scope is a new mandate), the gate
+  refuses an incomplete one, and `revalidate` answers 0 holds / 1 does not (with reasons) /
+  2 none on record. No credentials, and prose never counts as a mandate.
+
 ## 1.2 — 2026-11-01
 
 The protocol now has a measurement layer under `evals/`. The same ten scenarios run

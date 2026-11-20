@@ -768,6 +768,11 @@ def _check_golden(evals_dir, scenario, expected, row, oracle, repo_root, errors)
         if not path.exists():
             label = '' if path == golden else '/' + path.relative_to(golden).as_posix()
             errors.append('case %s: golden%s missing' % (case_id, label))
+    # Empty controls may omit the directory; a dangling link, a link to a
+    # directory, or a regular file is not an omitted directory. Never follow it.
+    if overlay.is_symlink() or (overlay.exists() and not overlay.is_dir()):
+        errors.append('case %s: golden/overlay must be a directory, not a symlink or file' % case_id)
+        return
     if not reply_path.is_file() or not events_path.is_file():
         return
     reply = reply_path.read_text(encoding='utf-8')

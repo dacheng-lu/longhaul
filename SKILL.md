@@ -1,6 +1,6 @@
 ---
 name: longhaul
-description: "远航 · Longhaul coordinates complex long-horizon research, creation and implementation using durable checkpoints, available MCP/tool discovery, bounded model/subagent delegation, ABCD choices with a recommendation, evidence-based recovery and completion, and SECI-inspired learning. Use when the user requests Longhaul/远航, long-task safeguards, cross-session continuation, repeated-failure recovery, or this combined workflow. Skip routine one-step tasks unless explicitly requested."
+description: "远航 · Longhaul coordinates complex long-horizon research, creation and implementation using durable checkpoints, available MCP/tool discovery, bounded model/subagent delegation, ABCD choices with a recommendation, evidence-based recovery and completion, and SECI-inspired learning. Use when the user requests Longhaul/远航, long-task safeguards, cross-session continuation, repeated-failure recovery, bounded zoom-out / bigger-goal / 10x exploration, or this combined workflow. Skip routine one-step tasks unless explicitly requested."
 ---
 
 # 远航 · Longhaul
@@ -17,6 +17,37 @@ Support sustained progress, recoverable work and honest delivery. Treat this ski
 4. Discover relevant skills, callable MCPs/tools and supported delegation/model capabilities. Read [capabilities.md](references/capabilities.md) when selecting integrations or delegating. Resolve available capabilities before researching replacements.
 5. Choose one concrete next action and a small milestone. Continue authorized work autonomously. Ask only questions that materially affect the outcome; consult [grill.md](references/grill.md).
 
+For a consequential investment or product decision, optionally use [value-validation.md](references/value-validation.md) to test the weakest value assumption before expanding work. Apply the purpose-specific criteria; do not require monetization for noncommercial tasks.
+
+## Choose a necessary path
+
+For an architecture choice, recurring workflow, measured bottleneck or visibly
+expanded scope, make a short necessity pass before committing to a plan. Clarify
+the requested task and desired result without changing the user’s goal. Identify
+steps that can be omitted or combined and what function they still need to serve.
+Compare the shortest feasible path under the actual constraints with the current
+path, naming the metric and evidence; label an ideal lower bound or an estimate as
+such. Where feasible, test a small reversible change against the same acceptance
+criteria; do not claim a saving without a comparable observation. Preserve user
+requirements, authorization, data integrity, required approvals and recovery.
+Use `shortcuts[]` for an accepted limitation and its upgrade trigger, not a new
+ledger. Proceed directly on a clear local fix or a suitable established recipe;
+this pass is not mandatory overhead for every task. An applicable recipe is not
+proof of an automatic handoff. See [zoom-out.md](references/zoom-out.md) for a
+larger reframing and experiment when needed.
+
+## Zoom out when the frame is the problem
+
+When explicitly asked to think bigger, find the goal behind the goal, 整点新鲜的,
+or when repeated attempts stay inside one unhelpful frame, read
+[zoom-out.md](references/zoom-out.md). Preserve the original request; connect task,
+outcome and a possible standing system; inspect readiness; generate different
+frames with one deliberate move; select one bounded, falsifiable experiment.
+Treat 10x as a measurable hypothesis, never a promise or an authorization increase.
+Keep routine fixes direct. Return to execution after the short strategic pass.
+Use the [brief template](references/zoom-out-template.md) when a durable decision
+record helps; [source lineage](references/zoom-out-sources.md) documents adaptations.
+
 ## Keep durable task state
 
 Maintain one authoritative record per task: goal, constraints, milestones, artifact revision, acceptance criteria, evidence, blockers, attempts, decisions, capabilities and next action. Keep reusable lessons separate from progress. Record observable facts and concise rationales, not private reasoning traces or credentials.
@@ -29,18 +60,26 @@ Register each output with `artifact` (it records the sha256 and a content-derive
 
 Checkpoint after a verified milestone, consequential decision, failed approach, and before planned handoff or long operation. Do not depend on receiving a pre-crash event. On resumption reconcile actual state and stale evidence before proceeding. Use separate records for independent tasks and one writer for shared state.
 
+Two additions stay optional, so every older record keeps validating. Record why a task stopped in a state a machine can sort: `report PATH --state progress|waiting|ready|blocked|failed|dropped --reason ...`; `blockers` keeps the prose a human reads. Record who authorised the work, under which policy version and with which scope, in `<record-stem>.mandate.json`; before resuming granted work, run `revalidate` and never continue on a grant that no longer holds. Read [report-states.md](references/report-states.md) and [mandate.md](references/mandate.md). Prose is not a mandate, and prompt text never relaxes either rule.
+
 ## Execute, inspect, adapt
 
 - Perform the next bounded action with the appropriate skill/tool. Parallelize independent reads; sequence dependencies and shared mutations.
 - Compare observations to the criterion. Separate attempted, produced and verified. Link evidence to the artifact revision it supports.
 - Trigger focused grilling at consequential forks, contradictory evidence, repeated failure or pre-delivery. Challenge the weakest assumption with a discriminating check. Avoid ceremonial fourteen-step reflection.
 - Default to at most two unchanged transient attempts and three meaningfully distinct approaches to one blocker, unless the user sets another budget. Record attempts with `blocker_key`, `hypothesis_before` and `hypothesis_after`: the gate rejects an unchanged retry and three attempts on one blocker without a hypothesis change. Check external effects before retrying an operation that may have succeeded. Change hypothesis, use a safe fallback or report the blocker while continuing independent work.
+- When a real resource budget applies, reserve verification and recovery capacity before another attempt. Use measured costs, keep units separate, and refresh shared allocations on resume. Read [recovery-budget.md](references/recovery-budget.md); do not infer a universal 25% allocation or calibrated probabilities from model confidence.
 - Never lower acceptance criteria merely to declare completion. Record user-approved scope changes explicitly.
 - Give concise progress updates at the host's required cadence: findings, uncertainty and next action.
 
 ## Delegate selectively
 
 Use supported subagents for separable research, implementation or independent review when benefit exceeds coordination cost. Default to zero for small work and at most two concurrent workers for complex work, within host limits. Use only enumerated models and actual model-selection parameters. Read [capabilities.md](references/capabilities.md). If delegation is unavailable, work sequentially; never fabricate a worker result.
+
+For a local wiki-backed browser game, use the sibling
+[longhaul-captain](skills/longhaul-captain/SKILL.md) skill: it adds an
+interpretation gate, source-backed content checks and separate local, Deck and
+LAN evidence gates.
 
 ## Grill with ABCD + recommendation
 

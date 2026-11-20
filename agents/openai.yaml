@@ -1,9 +1,9 @@
 interface:
-  display_name: 远航 · Longhaul
-  short_description: 长任务恢复、工具发现、子代理协作、选项式审查与证据验收
-  default_prompt: 使用 $longhaul 推进这个复杂任务：发现可用工具，按需委派子代理，在关键取舍时用 ABCD 加推荐项追问，并保存恢复点、验证交付。
-  icon_small: assets/icon.svg
-  icon_large: assets/icon.svg
+  display_name: "远航 · Longhaul"
+  short_description: "长任务恢复、目标升维、可证伪实验、工具发现与证据验收"
+  default_prompt: "使用 $longhaul 推进这个复杂任务：必要时先升维目标并选择可证伪的小实验，发现可用工具，按需委派子代理，在关键取舍时用 ABCD 加推荐项追问，并保存恢复点、验证交付。"
+  icon_small: "assets/icon.svg"
+  icon_large: "assets/icon.svg"
 policy:
   products:
   - chatgpt

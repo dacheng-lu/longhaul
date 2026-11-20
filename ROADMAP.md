@@ -39,14 +39,14 @@ Acceptance: prose, examples and tests agree on the same representative scenarios
 
 ## Known open findings — candidate v1.2.1 / 已知未修的审计发现
 
-Found by an independent audit of the v1.2 CI fix (the report is not in this repository). The audit rated the first three MINOR and the last one PLAN. Each was reproduced against `main` at `5611858` before being listed. None is fixed yet; this section records them and does not schedule them.
+Found by an independent audit of the v1.2 CI fix (the report is not in this repository). The audit rated the first three MINOR and the last one PLAN. Each was reproduced against `main` at `5611858` before being listed. The control-overlay validation and regression coverage for required control files have since been fixed; the remaining items below are unscheduled.
 
-由对 v1.2 CI 修复的独立审计发现（报告不在本仓库）。审计将前三项评为 MINOR，最后一项评为 PLAN。每一项都在 `main`（`5611858`）上重现过才列出。尚未修复；本节只记录，不排期。
+由对 v1.2 CI 修复的独立审计发现（报告不在本仓库）。审计将前三项评为 MINOR，最后一项评为 PLAN。每一项都在 `main`（`5611858`）上重现过才列出。其中控制案例 overlay 校验与必需文件的回归覆盖已修复；其余事项仅记录、不排期。
 
-- [ ] `tests/test_release_contract.py`: `test_the_checkout_fetches_the_full_history` asserts `'fetch-depth: 0' in step`, a substring match that a commented-out line would also satisfy. Match the line itself.
-- [ ] `evals/scripts/casespec.py`: for the two control cases (`control-trivial`, `control-finish`) the validator accepts a dangling symlink at `golden/overlay` without an error (`validate` prints `"ok": true`).
-- [ ] `tests/test_eval_cases.py`: nothing shows that a control case still needs its `reply.md` and `events.jsonl` after the empty-overlay exemption. With that requirement removed from `_check_golden`, all 97 tests in the file still pass.
-- [ ] `tests/test_eval_runner.py`: the two pin tests skip on a shallow checkout instead of failing. With `CI` set they should fail, so a shallow checkout cannot pass silently.
+- [x] `tests/test_release_contract.py`: `test_the_checkout_fetches_the_full_history` asserts `'fetch-depth: 0' in step`, a substring match that a commented-out line would also satisfy. Match the line itself.
+- [x] `evals/scripts/casespec.py`: reject malformed control overlays, including dangling symlinks and regular files, while preserving the valid absent-directory case.
+- [x] `tests/test_eval_cases.py`: cover the required `reply.md` and `events.jsonl` for both controls.
+- [x] `tests/test_eval_runner.py`: the two pin tests skip on a shallow checkout instead of failing. With `CI` set they should fail, so a shallow checkout cannot pass silently.
 
 Acceptance: each item has a test that fails before the fix and passes after it, and the suite stays green on a fresh full-history clone with `TMPDIR`, `TEMP` and `TMP` unset.
 
@@ -121,6 +121,18 @@ Acceptance: a supported adapter detects stale evidence at completion and can res
 - [ ] Require explicit authorization before changing permanent skills; never infer weight updates from stored lessons.
 
 Acceptance: a lesson can be rejected by evidence, and any claimed improvement is supported outside its original example.
+
+## Proposal — v2.0 trust substrate (not decided) / 提议（未决定）
+
+Design only, not scheduled, and deliberately conditional: the v1.3 live-benefit measurement
+is not finished, so nothing here is built beyond what that measurement justifies. If v1.3
+shows no benefit over the current workflow, this direction is withdrawn.
+
+提议，未决定，不排期。仅设计；v1.3 的真实收益测量尚未完成，因此在该测量证明有必要之前不实现。
+若 v1.3 显示没有收益，则撤回此方向。
+
+- [docs/proposals/trust-substrate-2.0.md](docs/proposals/trust-substrate-2.0.md): immutable Mandates, a phase decision table, stateless replayable verdicts, independent verification (a producer cannot certify itself), a gate run by the host on Makeextreme's evidence, and cluster evaluation cases (racing workers, forged completion, stale peer writes, injected instructions, revoked Mandate). The shared exchange format with Makeextreme and FlowLore is drafted as `trio-trust/0` and is not frozen until one real release-digest run passes.
+- Acceptance cases are listed in the proposal with negative controls. Attention cost (interruptions per delivered task) is reported, never optimised by hiding a problem.
 
 ## Recommended next milestone / 推荐下一步
 

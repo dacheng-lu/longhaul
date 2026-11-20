@@ -250,6 +250,28 @@ class TestCorruptions:
         assert errors_for(clone) == []
         assert casespec.golden_overlay_paths(clone, 'control-trivial') == []
 
+    @pytest.mark.parametrize('case', ['control-trivial', 'control-finish'])
+    @pytest.mark.parametrize('kind', ['dangling', 'file', 'directory_link'])
+    def test_optional_control_overlay_must_not_be_a_link_or_file(self, tmp_path, case, kind):
+        clone = suite_copy(tmp_path)
+        overlay = clone / 'scenarios' / case / 'golden' / 'overlay'
+        if overlay.exists():
+            shutil.rmtree(overlay)
+        if kind == 'dangling':
+            overlay.symlink_to('missing')
+        elif kind == 'directory_link':
+            overlay.symlink_to(overlay.parent, target_is_directory=True)
+        else:
+            overlay.write_text('not a directory')
+        assert_error(errors_for(clone), 'case %s: golden/overlay must be a directory' % case)
+
+    @pytest.mark.parametrize('case', ['control-trivial', 'control-finish'])
+    @pytest.mark.parametrize('name', ['reply.md', 'events.jsonl'])
+    def test_controls_still_require_golden_reply_and_events(self, tmp_path, case, name):
+        clone = suite_copy(tmp_path)
+        (clone / 'scenarios' / case / 'golden' / name).unlink()
+        assert_error(errors_for(clone), 'case %s: golden/%s missing' % (case, name))
+
     def test_seventh_key_in_a_case_row(self, tmp_path):
         clone = suite_copy(tmp_path)
         edit_rows(clone / 'cases.jsonl',

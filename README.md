@@ -14,15 +14,43 @@
 
 [English](#english) · [简体中文](#zh-cn) · [Deutsch](#deutsch)
 
+[Website](https://www.dev-lu.com/) · [Documentation](docs/first-checkpoint.md) · [License](LICENSE)
+
+**Three independent projects:** [FlowLore](https://github.com/dacheng-lu/flowlore) · [Longhaul](https://github.com/dacheng-lu/longhaul) · [Makeextreme](https://github.com/dacheng-lu/makeextreme)  
+**No shared adapter or automatic handoff is built in.**
+
+[Value validation / 价值验证 / Nutzen prüfen](references/value-validation.md) · [Zoom out / 目标升维 / Ziel erweitern](references/zoom-out.md)
+
+[Three-project guide / 三项目指南 / Leitfaden für drei Projekte](https://github.com/dacheng-lu/flowlore/blob/main/AGENT-GUIDE.md) · [Joint recovery demo / 联合恢复演示 / Gemeinsames Wiederaufnahme-Beispiel](docs/makeextreme-handoff.md) · [Goal / 项目目标 / Ziel](GOAL.md) · [First checkpoint example / 检查点入门 / Checkpoint-Beispiel](docs/first-checkpoint.md) · [Asset handoff / 素材交接 / Asset-Übergabe](docs/asset-pipeline.md)
+
 Skill version: **1.2** · [Core protocol / 核心流程 / Kernprotokoll](SKILL.md) · [Apache-2.0](LICENSE)
+
+**Specialist skill / 专项技能 / Spezialisierter Skill:** [Longhaul Captain](skills/longhaul-captain/SKILL.md) — plan and verify local wiki-backed browser games / 规划并验证本地 Wiki 浏览器游戏 / lokale Wiki-Browserspiele planen und prüfen.
 
 [Roadmap / 升级路线图 / Entwicklungsplan](ROADMAP.md) — priorities, acceptance criteria and Harness Engineering positioning; proposed work, not shipped features.
 
 ## English
 
+**Choosing a tool:** Use Longhaul for exploratory work, decisions and evidence across sessions. Use [Makeextreme](https://github.com/dacheng-lu/makeextreme) for known-stage pipelines with runnable checks. [FlowLore](https://github.com/dacheng-lu/flowlore) catalogs sources and recipes. All three work independently; a shared adapter is not implemented. [Try the checkpoint example](docs/first-checkpoint.md).
+
 Longhaul is a lightweight orchestration skill for long-running research, creation and implementation tasks. It helps an AI assistant preserve task state, select available tools, challenge consequential assumptions and verify deliverables before declaring completion.
 
 It combines **durable checkpoints + MCP/tool discovery + selective model/subagent delegation + ABCD decisions + SECI-inspired learning**. Specialist skills remain responsible for domain-specific work and quality checks.
+
+**Think bigger, then test smaller:** on explicit zoom-out requests or framing stalls, connect the task to its outcome, compare distinct routes and choose one falsifiable experiment. [Protocol and template](references/zoom-out.md); no promised 10x gain or automatic scope expansion.
+
+### The task lifecycle
+
+```mermaid
+flowchart TD
+    A["Set goal"] --> B["Work and checkpoint"]
+    B --> C{"Decision or recovery?"}
+    C -->|"Continue"| D["Reconcile and adjust"]
+    D --> B
+    C -->|"Deliver"| E["Verify artifacts and evidence"]
+```
+
+Checkpoints require persistent storage supplied by the host. Longhaul is not a background service. [Try a checkpoint](docs/first-checkpoint.md).
 
 ### When to use it
 
@@ -76,6 +104,8 @@ python3 scripts/checkpoint.py evidence ../longhaul-state/task.json --id E1 --art
 python3 scripts/checkpoint.py gate ../longhaul-state/task.json
 ```
 
+Add `--run-case ID --run-model NAME --run-input SHA256` to an evidence command to bind the observation to the run that produced it. If a criterion carries the same three-field `run` object, `gate` refuses evidence from a different run even when the bytes and revision are identical; the binding is bookkeeping, not authentication.
+
 `revision` is the first 12 hex of the file's sha256, so nobody bumps a label by hand: register the file again and every piece of evidence bound to the old revision is reported stale, which re-verifies only the criteria that depend on it. `init` refuses to overwrite. A fresh template passes `validate` and **fails `gate`** until criteria are verified. `gate` also rejects a credential-shaped value in the state, an unchanged retry, a third attempt without a hypothesis change, a bundled next action, a future timestamp, an artifact no evidence binds, and a shortcut without an upgrade trigger. It checks bookkeeping and local hashes — **not** semantic correctness or remote results. `migrate` upgrades a v1 record and re-binds evidence only while the content hash still matches. See the [checkpoint contract](references/state.md).
 
 Keep task state outside the installed skill directory and persist it through the host’s durable storage workflow. A temporary local path alone is not a recovery guarantee.
@@ -90,19 +120,48 @@ Keep task state outside the installed skill directory and persist it through the
 - The eval harness compares conditions on fixed fixture scenarios; a higher score is comparative evidence about the skill, not a guarantee that your task's result is correct.
 - A live model evaluation is **blocked**: no credential boundary can be proven against an untrusted subject, so no runner API reads, copies or accepts a key and the harness runs the verified offline test double only. A future live pilot needs an authorized, independently audited credential broker.
 
+### Local-model evaluation runs
+
+For a long local-model matrix, `scripts/eval_verify.py verify RUN_DIR` checks a
+frozen `contract.json`, `run.json`, `metrics.json` and the raw attempts under
+`attempts/`. It keeps three outcomes apart: execution completion, evidence
+validity and quality-gate pass. A finished model that fails a gate is a valid
+run with `quality_gate_status: fail`; a missing raw trace or a short coverage
+count is `evidence_status: invalid`. Exit code 0 only means
+`verification.json` was written. See [docs/eval-verify.md](docs/eval-verify.md)
+and `schemas/eval-contract.schema.json`.
+
 ### Contributing
 
 Useful contributions include reproducible recovery scenarios, clearer host setup instructions and checks that catch unsupported completion claims. Include the expected behavior, observed behavior and verification steps. Never include credentials or private task data.
 
 [Files and design references](#files-and-design-references) · [Back to top](#远航--longhaul)
 
+<a id="zh-cn"></a>
 <a name="zh-cn"></a>
 
 ## 简体中文
 
+**如何选择：** 探索性任务、跨会话决策与证据管理使用 Longhaul；阶段已知、可用命令检查的流水线可使用 [Makeextreme](https://github.com/dacheng-lu/makeextreme)。[FlowLore](https://github.com/dacheng-lu/flowlore) 整理来源与配方。三者可以独立使用；共享适配器尚未实现。[体验检查点示例](docs/first-checkpoint.md)。
+
 远航是面向长期研究、创作与实现任务的轻量编排 Skill，帮助 AI 保存任务状态、选择可用工具、审查关键假设，并在宣称完成之前验证交付物。
 
 它结合了 **持久化检查点 + MCP／工具发现 + 按需模型／子代理委派 + ABCD 决策 + SECI 式经验积累**。具体领域的执行与质量检查仍由相应专业 Skill 负责。
+
+**目标升维，再用小实验验证：** 明确要求跳出局限或陷入同一框架时，连接任务与真实目标，比较不同路径，选一个可证伪实验。[流程与模板](references/zoom-out.md)；不承诺十倍收益，不自动扩大权限。
+
+### 任务如何推进
+
+```mermaid
+flowchart TD
+    A["明确目标"] --> B["执行并保存检查点"]
+    B --> C{"决策或恢复？"}
+    C -->|"继续"| D["核对状态并调整"]
+    D --> B
+    C -->|"交付"| E["验证产物与证据"]
+```
+
+检查点依赖宿主提供持久存储；Longhaul 不是后台服务。[体验检查点](docs/first-checkpoint.md)。
 
 ### 适用场景
 
@@ -156,6 +215,8 @@ python3 scripts/checkpoint.py evidence ../longhaul-state/task.json --id E1 --art
 python3 scripts/checkpoint.py gate ../longhaul-state/task.json
 ```
 
+在 evidence 命令后加上 `--run-case ID --run-model NAME --run-input SHA256`，即可把观测绑定到产生它的那次运行。若验收条件带有同样的三字段 `run` 对象，则即使字节与修订完全相同，`gate` 也会拒绝来自其他运行的证据；该绑定只是记账，不是身份认证。
+
 `revision` 是文件 sha256 的前 12 位，因此不需要手工递增版本号：再次登记同一文件就会产生新版本，绑定旧版本的证据被标记为过期，只有依赖它的验收条件需要重新核验。`init` 拒绝覆盖已有文件；新模板可以通过 `validate`，但在验收条件通过前**必然无法通过 `gate`**。`gate` 还会拒绝：状态中的凭证形态数值、原样重试、同一阻塞第三次仍未更换假设、打包多步的下一步动作、未来时间戳、没有任何证据绑定的产物，以及没有升级触发的捷径记录。它只检查记账与本地哈希，**不**判断内容是否正确，也不核验远程结果。`migrate` 把 v1 记录升级为 v2，并且只在内容哈希仍然一致时重新绑定证据。详见[检查点约定](references/state.md)。
 
 将任务状态保存在已安装 Skill 目录之外，并通过宿主的持久存储流程保存。仅有一个临时本地路径，不能保证任务可恢复。
@@ -178,9 +239,26 @@ python3 scripts/checkpoint.py gate ../longhaul-state/task.json
 
 ## Deutsch
 
+**Werkzeugwahl:** Longhaul unterstützt offene Aufgaben, Entscheidungen und Belege über Sitzungen hinweg; [Makeextreme](https://github.com/dacheng-lu/makeextreme) führt Pipelines mit bekannten Stufen und prüfbaren Ergebnissen aus. [FlowLore](https://github.com/dacheng-lu/flowlore) sammelt Quellen und Rezepte. Alle drei funktionieren unabhängig; ein gemeinsamer Adapter ist nicht implementiert. [Checkpoint-Beispiel](docs/first-checkpoint.md).
+
 Longhaul ist ein schlanker Orchestrierungs-Skill für länger dauernde Recherche-, Gestaltungs- und Implementierungsaufgaben. Er hilft einem KI-Assistenten, den Aufgabenstand zu sichern, verfügbare Werkzeuge auszuwählen, wichtige Annahmen zu hinterfragen und Ergebnisse vor dem Abschluss zu prüfen.
 
 Er verbindet **dauerhafte Checkpoints + MCP- und Werkzeugerkennung + gezielten Einsatz von Modellen und Subagenten + ABCD-Entscheidungen + SECI-inspirierte Wissensentwicklung**. Fachspezifische Skills übernehmen weiterhin die eigentliche Facharbeit und deren Qualitätsprüfung.
+
+**Größer denken, begrenzt testen:** Bei explizitem Zoom-out oder einer festgefahrenen Sichtweise das Ziel klären, unterschiedliche Wege vergleichen und ein widerlegbares Experiment wählen. [Protokoll und Vorlage](references/zoom-out.md); kein versprochener 10x-Effekt und keine automatische Ausweitung der Befugnisse.
+
+### Ablauf einer Aufgabe
+
+```mermaid
+flowchart TD
+    A["Ziel festlegen"] --> B["Arbeiten und Checkpoint speichern"]
+    B --> C{"Entscheidung oder Wiederaufnahme?"}
+    C -->|"Fortsetzen"| D["Stand abgleichen und anpassen"]
+    D --> B
+    C -->|"Abgeben"| E["Artefakte und Belege prüfen"]
+```
+
+Checkpoints benötigen dauerhaften Speicher des Hosts. Longhaul ist kein Hintergrunddienst. [Checkpoint ausprobieren](docs/first-checkpoint.md).
 
 ### Wann ist Longhaul sinnvoll?
 
@@ -235,6 +313,8 @@ python3 scripts/checkpoint.py evidence ../longhaul-state/task.json --id E1 --art
 python3 scripts/checkpoint.py gate ../longhaul-state/task.json
 ```
 
+Mit `--run-case ID --run-model NAME --run-input SHA256` wird eine Beobachtung an den Lauf gebunden, der sie erzeugt hat. Trägt ein Kriterium dasselbe dreiteilige `run`-Objekt, lehnt `gate` Belege aus einem anderen Lauf ab, auch wenn Bytes und Revision identisch sind; die Bindung ist Buchführung, keine Authentifizierung.
+
 `revision` sind die ersten 12 Hex-Zeichen des sha256 der Datei — niemand zählt eine Version von Hand hoch: wird die Datei erneut registriert, gilt jeder an die alte Revision gebundene Beleg als veraltet, und nur die davon abhängigen Kriterien müssen erneut geprüft werden. `init` überschreibt nichts; eine neue Vorlage besteht `validate` und **scheitert an `gate`**, solange Kriterien nicht verifiziert sind. `gate` weist außerdem zurück: einen zugangsdatenförmigen Wert im Zustand, einen unveränderten Wiederholungsversuch, einen dritten Versuch ohne Hypothesenwechsel, einen gebündelten nächsten Schritt, einen Zeitstempel in der Zukunft, ein Artefakt ohne Beleg und eine Abkürzung ohne Auslöser für die Rückkehr. Geprüft werden Buchhaltung und lokale Hashes — **nicht** inhaltliche Richtigkeit oder entfernte Ergebnisse. `migrate` hebt einen v1-Datensatz auf v2 und bindet Belege nur neu, solange der Inhalts-Hash noch passt. Details: [Checkpoint-Spezifikation](references/state.md).
 
 Den Aufgabenstand außerhalb des installierten Skill-Verzeichnisses ablegen und über die dauerhafte Speicherfunktion der Host-Umgebung sichern. Ein temporärer lokaler Pfad allein garantiert keine Wiederaufnahme.
@@ -266,6 +346,8 @@ The implementation documents are currently in English. 本节链接的实现文�
 | [references/capabilities.md](references/capabilities.md) | Tools and delegation · 工具与委派 · Werkzeuge und Delegation |
 | [references/grill.md](references/grill.md) | ABCD decision review · ABCD 决策审查 · ABCD-Entscheidungsprüfung |
 | [references/decision.md](references/decision.md) | Weighted decision matrix · 加权决策矩阵 · Gewichtete Entscheidungsmatrix |
+| [references/zoom-out.md](references/zoom-out.md) | Bounded reframing · 目标升维 · Begrenzter Perspektivwechsel |
+| [references/zoom-out-sources.md](references/zoom-out-sources.md) | Five inspected sources · 五份来源 · Fünf geprüfte Quellen |
 | [references/learning.md](references/learning.md) | SECI and lessons · SECI 与经验积累 · SECI und Lektionen |
 | [scripts/checkpoint.py](scripts/checkpoint.py) | State validator · 状态验证器 · Zustandsvalidator |
 | [scripts/secret_scan.py](scripts/secret_scan.py) | Credential detector · 凭证检测器 · Zugangsdaten-Erkennung |
@@ -284,3 +366,4 @@ Entwurfsquellen, keine mitgelieferten Abhängigkeiten oder behaupteten Partnersc
 - [Nonaka, Toyama & Konno (2000)](https://doi.org/10.1016/S0024-6301(99)00115-6): SECI theory; its application here is a design proposal / SECI 理论，此处的 AI 应用属于设计提案 / SECI-Theorie; die Anwendung auf KI ist hier ein Entwurfsvorschlag.
 
 License / 许可证 / Lizenz: [Apache License 2.0](LICENSE).
+
